@@ -1,0 +1,19 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.facade.datatype.attribute;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-09
+@Description	A datatype defining an attribute
+public Enumeration AttributeType {
+
+	@LiteralId	"C"
+    CODE
+    
+    @LiteralId	"S"
+    STRING
+	
+}

@@ -1,0 +1,43 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.facade.component;
+
+import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
+import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
+import org.nabucco.testautomation.schema.facade.datatype.attribute.Attribute;
+import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchemaConfig;
+import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaConfig;
+import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaElement;
+import org.nabucco.testautomation.schema.facade.service.produce.ProduceAttribute;
+import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaConfig;
+import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaElement;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-09
+@Version		1.0
+@Description	Component for TestAutomation schemas
+@ComponentPrefix scma
+public Component SchemaComponent {
+
+	private persistent Datatype SchemaConfig[1] schemaConfig;	
+
+	private persistent Datatype SchemaElement[1] schemaElement;	
+
+	private persistent Datatype Attribute[1] attribute;	
+
+	public Service MaintainSchemaConfig;
+	
+	public Service ProduceSchemaConfig;
+	
+	public Service ProduceSchemaElement;
+	
+	public Service ProduceAttribute;
+	
+	public Service SearchSchemaConfig;
+	
+	public Service SearchSchemaElement;
+
+}

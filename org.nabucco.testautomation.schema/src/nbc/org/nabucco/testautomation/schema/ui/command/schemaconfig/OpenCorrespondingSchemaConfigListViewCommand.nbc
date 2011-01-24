@@ -1,0 +1,17 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.schema.ui.command.schemaconfig;
+
+@Author         Stefan Huettenrauch
+@Company        PRODYNA AG
+@Date           2010-06-10
+@Description    open list view for SchemaConfig
+@Id             org.nabucco.testautomation.schema.ui.command.config.OpenCorrespondingSchemaConfigListViewCommand
+public Command OpenCorrespondingSchemaConfigListViewCommand {
+
+    @ManualImplementation
+    public void openCorrespondingSchemaConfigListView();
+
+}

@@ -1,0 +1,29 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.ui.search.config;
+
+import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-13
+@Version		1.0
+@Description 	Search view for datatype SchemaConfig
+@Id				org.nabucco.testautomation.schema.ui.search.config.SchemaConfigSearchView
+public SearchView SchemaConfigSearchView {
+
+	private Datatype SchemaConfig[1] schemaConfig;
+	
+	@MappedField 		schemaConfig.name
+	@FieldLabelId		SchemaConfig.name 
+	@FieldLabelDefault 	"Name"
+	private LabeledInputField schemaConfigName;
+	
+	@MappedField 		schemaConfig.description
+	@FieldLabelId		SchemaConfig.description
+	@FieldLabelDefault 	"Description"
+	private LabeledInputField schemaConfigDescription;
+	
+}

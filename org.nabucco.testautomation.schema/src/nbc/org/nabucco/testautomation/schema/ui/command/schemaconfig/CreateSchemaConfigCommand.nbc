@@ -1,0 +1,17 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.schema.ui.command.schemaconfig;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-14
+@Description	This command is for creating a SchemaConfig
+@Id				org.nabucco.testautomation.schema.ui.command.config.CreateSchemaConfigCommand
+public Command CreateSchemaConfigCommand {
+
+	@ManualImplementation
+	public void createSchemaConfigCommand();
+
+}

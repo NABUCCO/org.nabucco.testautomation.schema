@@ -1,0 +1,24 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.facade.service.search;
+
+import org.nabucco.framework.base.facade.exception.service.SearchException;
+import org.nabucco.testautomation.schema.facade.message.SchemaElementSearchMsg;
+import org.nabucco.testautomation.schema.facade.message.SchemaElementListMsg;
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-13
+@Version			1.0
+@Description		SchemaElement search service
+public Service SearchSchemaElement {
+	
+	@Inject
+	private EntityManager[1] em;
+
+	@ManualImplementation
+	public SchemaElementListMsg searchSchemaElement(SchemaElementSearchMsg schemaElementSearchMsg) throws SearchException;
+	
+}

@@ -1,0 +1,20 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.facade.service.produce;
+
+import org.nabucco.framework.base.facade.exception.service.ProduceException;
+import org.nabucco.testautomation.schema.facade.message.SchemaElementMsg;
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-13
+@Version			1.0
+@Description		SchemaElement produce service
+public Service ProduceSchemaElement {
+	
+	@ManualImplementation
+	public SchemaElementMsg produceSchemaElement() throws ProduceException;
+	
+}

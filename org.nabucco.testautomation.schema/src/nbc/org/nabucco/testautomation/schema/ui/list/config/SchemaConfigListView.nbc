@@ -1,0 +1,28 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.schema.ui.list.config;
+
+import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
+
+@Author			Stefan Huettenrauch
+@Company		PRODYNA AG
+@Date			2010-05-25
+@Description	ListView for TestConfiguration
+@Id				org.nabucco.testautomation.schema.ui.list.config.SchemaConfigListView
+public ListView SchemaConfigListView {
+
+	private Datatype SchemaConfig[1] schemaConfig;
+	
+	@MappedField 			schemaConfig.name
+	@ColumnLabelId			schemaConfig.name 
+	@ColumnLabelDefault 	"Schema Config Name"
+	private Column schemaConfigName;
+	
+	@MappedField 			schemaConfig.description
+	@ColumnLabelId			schemaConfig.description 
+	@ColumnLabelDefault 	"Schema Config Description"
+	private Column schemaConfigDescription;
+	
+}

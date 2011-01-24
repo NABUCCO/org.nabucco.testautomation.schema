@@ -1,0 +1,22 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.schema.facade.datatype;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-08
+@Description	Enumeration to indicate a script container
+public Enumeration ScriptContainerType {
+
+    @LiteralId	"N"
+    NONE
+    
+    @LiteralId	"O"
+    ONE
+    
+    @LiteralId	"M"
+    MANY
+    
+}
