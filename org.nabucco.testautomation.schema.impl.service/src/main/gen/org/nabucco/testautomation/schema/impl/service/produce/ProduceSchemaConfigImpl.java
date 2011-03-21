@@ -27,6 +27,8 @@ public class ProduceSchemaConfigImpl extends ServiceSupport implements ProduceSc
 
     private ProduceSchemaConfigServiceHandler produceSchemaConfigServiceHandler;
 
+    private ProduceSchemaConfigCloneServiceHandler produceSchemaConfigCloneServiceHandler;
+
     /** Constructs a new ProduceSchemaConfigImpl instance. */
     public ProduceSchemaConfigImpl() {
         super();
@@ -40,6 +42,12 @@ public class ProduceSchemaConfigImpl extends ServiceSupport implements ProduceSc
         if ((this.produceSchemaConfigServiceHandler != null)) {
             this.produceSchemaConfigServiceHandler.setEntityManager(null);
             this.produceSchemaConfigServiceHandler.setLogger(super.getLogger());
+        }
+        this.produceSchemaConfigCloneServiceHandler = injector
+                .inject(ProduceSchemaConfigCloneServiceHandler.getId());
+        if ((this.produceSchemaConfigCloneServiceHandler != null)) {
+            this.produceSchemaConfigCloneServiceHandler.setEntityManager(null);
+            this.produceSchemaConfigCloneServiceHandler.setLogger(super.getLogger());
         }
     }
 
@@ -60,6 +68,22 @@ public class ProduceSchemaConfigImpl extends ServiceSupport implements ProduceSc
         this.produceSchemaConfigServiceHandler.init();
         rs = this.produceSchemaConfigServiceHandler.invoke(rq);
         this.produceSchemaConfigServiceHandler.finish();
+        return rs;
+    }
+
+    @Override
+    public ServiceResponse<SchemaConfigMsg> produceSchemaConfigClone(
+            ServiceRequest<SchemaConfigMsg> rq) throws ProduceException {
+        if ((this.produceSchemaConfigCloneServiceHandler == null)) {
+            super.getLogger().error(
+                    "No service implementation configured for produceSchemaConfigClone().");
+            throw new InjectionException(
+                    "No service implementation configured for produceSchemaConfigClone().");
+        }
+        ServiceResponse<SchemaConfigMsg> rs;
+        this.produceSchemaConfigCloneServiceHandler.init();
+        rs = this.produceSchemaConfigCloneServiceHandler.invoke(rq);
+        this.produceSchemaConfigCloneServiceHandler.finish();
         return rs;
     }
 }

@@ -62,7 +62,7 @@ public abstract class ProduceSchemaConfigServiceHandler extends ServiceHandlerSu
             throw wrappedException;
         } catch (Exception e) {
             super.getLogger().error(e);
-            throw new ProduceException(e.getMessage());
+            throw new ProduceException("Error during service invocation.", e);
         }
     }
 

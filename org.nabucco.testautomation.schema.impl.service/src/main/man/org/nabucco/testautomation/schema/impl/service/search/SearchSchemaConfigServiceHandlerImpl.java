@@ -21,7 +21,10 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.datatype.validation.constraint.element.ConstraintFactory;
+import org.nabucco.framework.base.facade.datatype.visitor.VisitorException;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
@@ -65,9 +68,14 @@ public class SearchSchemaConfigServiceHandlerImpl extends SearchSchemaConfigServ
 
 		List<String> filter = new ArrayList<String>();
 
+		if (msg.getOwner() != null && msg.getOwner().getValue() != null) {
+			filter.add("s.owner = :owner");
+		}
+
 		if (msg.getName() != null && msg.getName().getValue() != null) {
 			filter.add("s.name LIKE '" + msg.getName().getValue() + "%'");
 		}
+		
 		if (msg.getId() != null && msg.getId().getValue() != null) {
 			filter.add("s.id = :id");
 		}
@@ -95,6 +103,10 @@ public class SearchSchemaConfigServiceHandlerImpl extends SearchSchemaConfigServ
 			query.setParameter("id", msg.getId().getValue());
 		}
 		
+		if (msg.getOwner() != null && msg.getOwner().getValue() != null) {
+			query.setParameter("owner", msg.getOwner());
+		}
+		
 		@SuppressWarnings("unchecked")
 		List<SchemaConfig> resultList = query.getResultList();
 		
@@ -102,6 +114,16 @@ public class SearchSchemaConfigServiceHandlerImpl extends SearchSchemaConfigServ
 			load(schemaConfig);
 			SchemaCache.getInstance().cacheSchemaConfig(schemaConfig);
 			rs.getSchemaConfigList().add(schemaConfig);
+			
+			// Check owner and set Editable-Constraint
+			if (!schemaConfig.getOwner().equals(NabuccoInstance.getInstance().getOwner())) {
+				try {
+					schemaConfig.addConstraint(ConstraintFactory.getInstance()
+							.createEditableConstraint(false), true);
+				} catch (VisitorException ex) {
+					throw new SearchException(ex);
+				}
+			}
 		}
 		return rs;
 	}

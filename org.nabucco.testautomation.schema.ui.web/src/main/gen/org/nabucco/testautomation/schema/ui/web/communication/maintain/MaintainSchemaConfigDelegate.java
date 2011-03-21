@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.maintain;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.MaintainException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
@@ -34,36 +34,15 @@ public class MaintainSchemaConfigDelegate extends ServiceDelegateSupport {
     /**
      * MaintainSchemaConfig.
      *
+     * @param session the NabuccoSession.
      * @param rq the SchemaConfigMsg.
      * @return the SchemaConfigMsg.
      * @throws MaintainException
      */
-    public SchemaConfigMsg maintainSchemaConfig(SchemaConfigMsg rq) throws MaintainException {
-        ServiceRequest<SchemaConfigMsg> request = new ServiceRequest<SchemaConfigMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<SchemaConfigMsg> rs;
-        if ((service != null)) {
-            rs = service.maintainSchemaConfig(request);
-        } else {
-            throw new MaintainException(
-                    "Cannot execute service operation: MaintainSchemaConfig.maintainSchemaConfig");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * MaintainSchemaConfig.
-     *
-     * @param subject the Subject.
-     * @param rq the SchemaConfigMsg.
-     * @return the SchemaConfigMsg.
-     * @throws MaintainException
-     */
-    public SchemaConfigMsg maintainSchemaConfig(SchemaConfigMsg rq, Subject subject)
+    public SchemaConfigMsg maintainSchemaConfig(SchemaConfigMsg rq, NabuccoSession session)
             throws MaintainException {
         ServiceRequest<SchemaConfigMsg> request = new ServiceRequest<SchemaConfigMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaConfigMsg> rs;
         if ((service != null)) {

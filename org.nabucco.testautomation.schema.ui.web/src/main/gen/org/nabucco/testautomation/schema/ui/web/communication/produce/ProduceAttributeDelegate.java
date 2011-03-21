@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.produce;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.ProduceException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
@@ -35,36 +35,15 @@ public class ProduceAttributeDelegate extends ServiceDelegateSupport {
     /**
      * ProduceAttribute.
      *
+     * @param session the NabuccoSession.
      * @param rq the EmptyServiceMessage.
      * @return the AttributeMsg.
      * @throws ProduceException
      */
-    public AttributeMsg produceAttribute(EmptyServiceMessage rq) throws ProduceException {
-        ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<AttributeMsg> rs;
-        if ((service != null)) {
-            rs = service.produceAttribute(request);
-        } else {
-            throw new ProduceException(
-                    "Cannot execute service operation: ProduceAttribute.produceAttribute");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * ProduceAttribute.
-     *
-     * @param subject the Subject.
-     * @param rq the EmptyServiceMessage.
-     * @return the AttributeMsg.
-     * @throws ProduceException
-     */
-    public AttributeMsg produceAttribute(EmptyServiceMessage rq, Subject subject)
+    public AttributeMsg produceAttribute(EmptyServiceMessage rq, NabuccoSession session)
             throws ProduceException {
         ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<AttributeMsg> rs;
         if ((service != null)) {

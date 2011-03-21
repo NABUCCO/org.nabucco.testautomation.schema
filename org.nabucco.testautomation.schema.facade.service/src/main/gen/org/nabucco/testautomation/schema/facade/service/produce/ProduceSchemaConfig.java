@@ -27,4 +27,14 @@ public interface ProduceSchemaConfig extends Service {
      */
     ServiceResponse<SchemaConfigMsg> produceSchemaConfig(ServiceRequest<EmptyServiceMessage> rq)
             throws ProduceException;
+
+    /**
+     * Missing description at method produceSchemaConfigClone.
+     *
+     * @param rq the ServiceRequest<SchemaConfigMsg>.
+     * @return the ServiceResponse<SchemaConfigMsg>.
+     * @throws ProduceException
+     */
+    ServiceResponse<SchemaConfigMsg> produceSchemaConfigClone(ServiceRequest<SchemaConfigMsg> rq)
+            throws ProduceException;
 }

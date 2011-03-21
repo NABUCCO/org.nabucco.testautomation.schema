@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.search;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
@@ -35,36 +35,15 @@ public class SearchSchemaConfigDelegate extends ServiceDelegateSupport {
     /**
      * SearchSchemaConfig.
      *
+     * @param session the NabuccoSession.
      * @param rq the SchemaConfigSearchMsg.
      * @return the SchemaConfigListMsg.
      * @throws SearchException
      */
-    public SchemaConfigListMsg searchSchemaConfig(SchemaConfigSearchMsg rq) throws SearchException {
-        ServiceRequest<SchemaConfigSearchMsg> request = new ServiceRequest<SchemaConfigSearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<SchemaConfigListMsg> rs;
-        if ((service != null)) {
-            rs = service.searchSchemaConfig(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchSchemaConfig.searchSchemaConfig");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * SearchSchemaConfig.
-     *
-     * @param subject the Subject.
-     * @param rq the SchemaConfigSearchMsg.
-     * @return the SchemaConfigListMsg.
-     * @throws SearchException
-     */
-    public SchemaConfigListMsg searchSchemaConfig(SchemaConfigSearchMsg rq, Subject subject)
+    public SchemaConfigListMsg searchSchemaConfig(SchemaConfigSearchMsg rq, NabuccoSession session)
             throws SearchException {
         ServiceRequest<SchemaConfigSearchMsg> request = new ServiceRequest<SchemaConfigSearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaConfigListMsg> rs;
         if ((service != null)) {

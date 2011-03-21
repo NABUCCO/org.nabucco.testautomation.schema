@@ -11,6 +11,8 @@ import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
 import org.nabucco.testautomation.schema.facade.component.SchemaComponent;
 import org.nabucco.testautomation.schema.facade.component.SchemaComponentLocator;
+import org.nabucco.testautomation.schema.ui.web.communication.export.ExportSchemaDelegate;
+import org.nabucco.testautomation.schema.ui.web.communication.importing.ImportSchemaDelegate;
 import org.nabucco.testautomation.schema.ui.web.communication.maintain.MaintainSchemaConfigDelegate;
 import org.nabucco.testautomation.schema.ui.web.communication.produce.ProduceAttributeDelegate;
 import org.nabucco.testautomation.schema.ui.web.communication.produce.ProduceSchemaConfigDelegate;
@@ -41,6 +43,10 @@ public class SchemaComponentServiceDelegateFactory {
     private SearchSchemaConfigDelegate searchSchemaConfigDelegate;
 
     private SearchSchemaElementDelegate searchSchemaElementDelegate;
+
+    private ExportSchemaDelegate exportSchemaDelegate;
+
+    private ImportSchemaDelegate importSchemaDelegate;
 
     /** Constructs a new SchemaComponentServiceDelegateFactory instance. */
     private SchemaComponentServiceDelegateFactory() {
@@ -186,6 +192,46 @@ public class SchemaComponentServiceDelegateFactory {
             return this.searchSchemaElementDelegate;
         } catch (ConnectionException e) {
             throw new ClientException("Cannot locate service: SearchSchemaElement", e);
+        } catch (ServiceException e) {
+            throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
+        }
+    }
+
+    /**
+     * Getter for the ExportSchema.
+     *
+     * @return the ExportSchemaDelegate.
+     * @throws ClientException
+     */
+    public ExportSchemaDelegate getExportSchema() throws ClientException {
+        try {
+            if ((this.exportSchemaDelegate == null)) {
+                this.exportSchemaDelegate = new ExportSchemaDelegate(this.getComponent()
+                        .getExportSchema());
+            }
+            return this.exportSchemaDelegate;
+        } catch (ConnectionException e) {
+            throw new ClientException("Cannot locate service: ExportSchema", e);
+        } catch (ServiceException e) {
+            throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
+        }
+    }
+
+    /**
+     * Getter for the ImportSchema.
+     *
+     * @return the ImportSchemaDelegate.
+     * @throws ClientException
+     */
+    public ImportSchemaDelegate getImportSchema() throws ClientException {
+        try {
+            if ((this.importSchemaDelegate == null)) {
+                this.importSchemaDelegate = new ImportSchemaDelegate(this.getComponent()
+                        .getImportSchema());
+            }
+            return this.importSchemaDelegate;
+        } catch (ConnectionException e) {
+            throw new ClientException("Cannot locate service: ImportSchema", e);
         } catch (ServiceException e) {
             throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
         }

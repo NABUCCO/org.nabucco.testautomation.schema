@@ -62,7 +62,7 @@ public abstract class SearchSchemaConfigServiceHandler extends ServiceHandlerSup
             throw wrappedException;
         } catch (Exception e) {
             super.getLogger().error(e);
-            throw new SearchException(e.getMessage());
+            throw new SearchException("Error during service invocation.", e);
         }
     }
 

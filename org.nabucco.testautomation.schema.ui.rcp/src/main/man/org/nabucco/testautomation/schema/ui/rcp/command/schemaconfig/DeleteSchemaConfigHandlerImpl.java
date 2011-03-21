@@ -26,7 +26,6 @@ import org.nabucco.testautomation.schema.ui.rcp.command.schemaconfig.DeleteSchem
 import org.nabucco.testautomation.schema.ui.rcp.edit.schemaconfig.model.SchemaConfigEditBusinessModel;
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.SchemaMaintainanceMultiplePageEditView;
 
-
 /**
  * DeleteSchemaConfigHandlerImpl
  * 

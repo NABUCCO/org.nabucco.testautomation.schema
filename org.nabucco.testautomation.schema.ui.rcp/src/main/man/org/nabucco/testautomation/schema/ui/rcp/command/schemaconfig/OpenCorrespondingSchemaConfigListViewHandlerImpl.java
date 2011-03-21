@@ -22,7 +22,11 @@ import org.nabucco.testautomation.schema.ui.rcp.browser.config.SchemaConfigListV
 import org.nabucco.testautomation.schema.ui.rcp.command.schemaconfig.OpenCorrespondingSchemaConfigListViewHandler;
 import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListView;
 
-
+/**
+ * OpenCorrespondingSchemaConfigListViewHandlerImpl
+ * 
+ * @author Markus Jorroch, PRODYNA AG
+ */
 public class OpenCorrespondingSchemaConfigListViewHandlerImpl
 		extends
 		AbstractNabuccoOpenCorrespondingListViewHandlerImpl<SchemaConfigListViewBrowserElement, ListViewModel>
@@ -31,7 +35,6 @@ public class OpenCorrespondingSchemaConfigListViewHandlerImpl
 	@Override
 	public void openCorrespondingSchemaConfigListView() {
 		super.run();
-
 	}
 
 	@Override

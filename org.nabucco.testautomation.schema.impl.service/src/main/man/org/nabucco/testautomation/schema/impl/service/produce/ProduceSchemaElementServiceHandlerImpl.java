@@ -49,6 +49,7 @@ public class ProduceSchemaElementServiceHandlerImpl extends ProduceSchemaElement
 		schemaElement.setPropertyContainer(Boolean.FALSE);
 		schemaElement.setSkipable(Boolean.FALSE);
 		schemaElement.setJiraExport(Boolean.FALSE);
+		schemaElement.setCloneContext(Boolean.FALSE);
 		schemaElement.setScriptsAllowed(ScriptContainerType.NONE);
 		schemaElement.setName("Enter name ...");
 		

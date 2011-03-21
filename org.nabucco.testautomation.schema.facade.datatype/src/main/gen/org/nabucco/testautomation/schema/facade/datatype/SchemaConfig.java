@@ -3,16 +3,22 @@
  */
 package org.nabucco.testautomation.schema.facade.datatype;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Description;
-import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionState;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.ListProperty;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
+import org.nabucco.testautomation.facade.datatype.base.ExportDatatype;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
 
 /**
@@ -20,19 +26,23 @@ import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
  *
  * @author Steffen Schmidt, PRODYNA AG, 2010-04-09
  */
-public class SchemaConfig extends NabuccoDatatype implements Datatype {
+public class SchemaConfig extends ExportDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "name", "description", "schemaElementList" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "l0,255;m0,1;", "m0,n;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m0,1;", "m0,n;" };
+    public static final String NAME = "name";
+
+    public static final String DESCRIPTION = "description";
+
+    public static final String SCHEMAELEMENTLIST = "schemaElementList";
 
     private Name name;
 
     private Description description;
 
-    private List<SchemaElement> schemaElementList;
+    private NabuccoList<SchemaElement> schemaElementList;
 
     /** Constructs a new SchemaConfig instance. */
     public SchemaConfig() {
@@ -57,9 +67,8 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
         if ((this.getDescription() != null)) {
             clone.setDescription(this.getDescription().cloneObject());
         }
-        if ((this.schemaElementList instanceof NabuccoList<?>)) {
-            clone.schemaElementList = ((NabuccoList<SchemaElement>) this.schemaElementList)
-                    .cloneCollection();
+        if ((this.schemaElementList != null)) {
+            clone.schemaElementList = this.schemaElementList.cloneCollection();
         }
     }
 
@@ -70,9 +79,9 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
      */
     List<SchemaElement> getSchemaElementListJPA() {
         if ((this.schemaElementList == null)) {
-            this.schemaElementList = new NabuccoList<SchemaElement>(NabuccoCollectionState.LAZY);
+            this.schemaElementList = new NabuccoListImpl<SchemaElement>(NabuccoCollectionState.LAZY);
         }
-        return ((NabuccoList<SchemaElement>) this.schemaElementList).getDelegate();
+        return ((NabuccoListImpl<SchemaElement>) this.schemaElementList).getDelegate();
     }
 
     /**
@@ -82,9 +91,28 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
      */
     void setSchemaElementListJPA(List<SchemaElement> schemaElementList) {
         if ((this.schemaElementList == null)) {
-            this.schemaElementList = new NabuccoList<SchemaElement>(NabuccoCollectionState.LAZY);
+            this.schemaElementList = new NabuccoListImpl<SchemaElement>(NabuccoCollectionState.LAZY);
         }
-        ((NabuccoList<SchemaElement>) this.schemaElementList).setDelegate(schemaElementList);
+        ((NabuccoListImpl<SchemaElement>) this.schemaElementList).setDelegate(schemaElementList);
+    }
+
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(ExportDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 4,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION,
+                Description.class, 5, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(SCHEMAELEMENTLIST, PropertyDescriptorSupport.createCollection(
+                SCHEMAELEMENTLIST, SchemaElement.class, 6, PROPERTY_CONSTRAINTS[2], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
     }
 
     @Override
@@ -93,15 +121,34 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.name));
-        properties.add(new BasetypeProperty<Description>(PROPERTY_NAMES[1], Description.class,
-                PROPERTY_CONSTRAINTS[1], this.description));
-        properties.add(new ListProperty<SchemaElement>(PROPERTY_NAMES[2], SchemaElement.class,
-                PROPERTY_CONSTRAINTS[2], this.schemaElementList));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(NAME), this.name,
+                null));
+        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(DESCRIPTION),
+                this.description, null));
+        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(SCHEMAELEMENTLIST),
+                this.schemaElementList, null));
         return properties;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(DESCRIPTION) && (property.getType() == Description.class))) {
+            this.setDescription(((Description) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(SCHEMAELEMENTLIST) && (property.getType() == SchemaElement.class))) {
+            this.schemaElementList = ((NabuccoList<SchemaElement>) property.getInstance());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -142,17 +189,6 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<SchemaConfig>\n");
-        appendable.append(super.toString());
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<description>" + this.description) + "</description>\n"));
-        appendable.append("</SchemaConfig>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public SchemaConfig cloneObject() {
         SchemaConfig clone = new SchemaConfig();
         this.cloneObject(clone);
@@ -184,6 +220,9 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
      */
     public void setName(String name) {
         if ((this.name == null)) {
+            if ((name == null)) {
+                return;
+            }
             this.name = new Name();
         }
         this.name.setValue(name);
@@ -214,6 +253,9 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
      */
     public void setDescription(String description) {
         if ((this.description == null)) {
+            if ((description == null)) {
+                return;
+            }
             this.description = new Description();
         }
         this.description.setValue(description);
@@ -222,13 +264,32 @@ public class SchemaConfig extends NabuccoDatatype implements Datatype {
     /**
      * Missing description at method getSchemaElementList.
      *
-     * @return the List<SchemaElement>.
+     * @return the NabuccoList<SchemaElement>.
      */
-    public List<SchemaElement> getSchemaElementList() {
+    public NabuccoList<SchemaElement> getSchemaElementList() {
         if ((this.schemaElementList == null)) {
-            this.schemaElementList = new NabuccoList<SchemaElement>(
+            this.schemaElementList = new NabuccoListImpl<SchemaElement>(
                     NabuccoCollectionState.INITIALIZED);
         }
         return this.schemaElementList;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(SchemaConfig.class).getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(SchemaConfig.class).getAllProperties();
     }
 }

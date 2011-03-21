@@ -5,6 +5,8 @@ package org.nabucco.testautomation.schema.facade.component;
 
 import org.nabucco.framework.base.facade.component.Component;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
+import org.nabucco.testautomation.schema.facade.service.export.ExportSchema;
+import org.nabucco.testautomation.schema.facade.service.importing.ImportSchema;
 import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchemaConfig;
 import org.nabucco.testautomation.schema.facade.service.produce.ProduceAttribute;
 import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaConfig;
@@ -69,4 +71,20 @@ public interface SchemaComponent extends Component {
      * @throws ServiceException
      */
     SearchSchemaElement getSearchSchemaElement() throws ServiceException;
+
+    /**
+     * Getter for the ExportSchema.
+     *
+     * @return the ExportSchema.
+     * @throws ServiceException
+     */
+    ExportSchema getExportSchema() throws ServiceException;
+
+    /**
+     * Getter for the ImportSchema.
+     *
+     * @return the ImportSchema.
+     * @throws ServiceException
+     */
+    ImportSchema getImportSchema() throws ServiceException;
 }

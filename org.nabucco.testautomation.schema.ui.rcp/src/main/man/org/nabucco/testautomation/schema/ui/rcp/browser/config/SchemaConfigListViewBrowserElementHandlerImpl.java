@@ -23,7 +23,11 @@ import org.nabucco.testautomation.schema.ui.rcp.browser.config.SchemaConfigListV
 import org.nabucco.testautomation.schema.ui.rcp.browser.config.SchemaConfigListViewBrowserElementHandler;
 import org.nabucco.testautomation.schema.ui.rcp.list.config.model.SchemaConfigListViewModel;
 
-
+/**
+ * SchemaConfigListViewBrowserElementHandlerImpl
+ * 
+ * @author Markus Jorroch, PRODYNA AG
+ */
 public class SchemaConfigListViewBrowserElementHandlerImpl implements
 SchemaConfigListViewBrowserElementHandler {
 
@@ -35,9 +39,6 @@ SchemaConfigListViewBrowserElementHandler {
 			element.addBrowserElement(new SchemaConfigEditViewBrowserElement(schemaConfig));
 		}
 	}
-
-
-	
 	
 	@Override
 	public void removeChild(BrowserElement toBeRemoved,
@@ -50,9 +51,5 @@ SchemaConfigListViewBrowserElementHandler {
 //		SchemaConfigEditBusinessModel businessModel = new SchemaConfigEditBusinessModel();
 //		businessModel.save(schemaConfig);		
 	}
-
-	
-	
-	
 
 }

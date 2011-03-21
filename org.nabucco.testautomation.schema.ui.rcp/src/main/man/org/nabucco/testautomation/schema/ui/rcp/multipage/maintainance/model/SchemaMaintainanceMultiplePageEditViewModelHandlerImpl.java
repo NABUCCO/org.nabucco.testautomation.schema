@@ -37,6 +37,7 @@ import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.list.view.NabuccoTableColumnInfo;
 import org.nabucco.framework.plugin.base.component.list.view.NabuccoTableSorter;
+import org.nabucco.framework.plugin.base.component.multipage.masterdetail.MasterDetailHelper;
 import org.nabucco.framework.plugin.base.component.multipage.masterdetail.MasterDetailTreeNode;
 import org.nabucco.framework.plugin.base.component.multipage.masterdetail.MasterDetailTreeNodeCreatorForAllDatatypes;
 import org.nabucco.framework.plugin.base.component.multipage.masterdetail.addDialog.AddDialogLabelProvider;
@@ -50,6 +51,7 @@ import org.nabucco.framework.plugin.base.component.picker.dialog.ElementPickerPa
 import org.nabucco.framework.plugin.base.component.picker.dialog.LabelForDialog;
 import org.nabucco.framework.plugin.base.layout.ImageProvider;
 import org.nabucco.framework.plugin.base.logging.NabuccoLogMessage;
+import org.nabucco.testautomation.facade.datatype.base.HierarchyLevelType;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
 import org.nabucco.testautomation.schema.facade.datatype.attribute.Attribute;
@@ -62,14 +64,16 @@ import org.nabucco.testautomation.schema.ui.rcp.communication.produce.ProduceSch
 import org.nabucco.testautomation.schema.ui.rcp.communication.produce.ProduceSchemaElementDelegate;
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.masterdetails.SchemaMaintainanceMasterDetailLabelProvider;
 
-import org.nabucco.testautomation.facade.datatype.base.HierarchyLevelType;
-
 /**
  * SchemaMaintainanceMultiplePageEditViewModelHandlerImpl
  * 
  * @author Markus Jorroch, PRODYNA AG
  */
 public class SchemaMaintainanceMultiplePageEditViewModelHandlerImpl implements SchemaMaintainanceMultiplePageEditViewModelHandler {
+
+	private static final String ADD_ICON = "icons/add.png";
+
+	private static final String DELETE_ICON = "icons/delete.png";
 
 	private static final String NEW_ELEMENT = ".New";
 
@@ -95,13 +99,17 @@ public class SchemaMaintainanceMultiplePageEditViewModelHandlerImpl implements S
 			MasterDetailTreeNode treeNode = (MasterDetailTreeNode) firstElement;
 			Datatype datatype = treeNode.getDatatype();
 
-			Menu newElementMenu = createMenu(result, ID + NEW_ELEMENT, "icons/add.png");
+			if(!MasterDetailHelper.isDatatypeEditable(datatype)){
+				return null;
+			}
+			
+			Menu newElementMenu = createMenu(result, ID + NEW_ELEMENT, ADD_ICON);
 
 			if (datatype instanceof SchemaConfig) {
 				// create menu entries for each schema element
-				Datatype schemaElement = create(SchemaElement.class);
-				Image image = ImageProvider.createImage(SchemaMaintainanceMasterDetailLabelProvider.getInstance().getImage(schemaElement));
-				new NewDatatypeMenuItem(newElementMenu, treeNode, this, schemaElement, treeViewer, ID + SCHEMA_ELEMENT, null, image);
+				Datatype schemaConfig = create(SchemaElement.class);
+				Image image = ImageProvider.createImage(SchemaMaintainanceMasterDetailLabelProvider.getInstance().getImage(schemaConfig));
+				new NewDatatypeMenuItem(newElementMenu, treeNode, this, schemaConfig, treeViewer, ID + SCHEMA_ELEMENT, null, image);
 			} else if (datatype instanceof SchemaElement) {
 				// create menu entries for each schema element
 				Datatype schemaElement = create(SchemaElement.class);
@@ -109,20 +117,23 @@ public class SchemaMaintainanceMultiplePageEditViewModelHandlerImpl implements S
 				new NewDatatypeMenuItem(newElementMenu, treeNode, this, schemaElement, treeViewer, ID + SCHEMA_ELEMENT, null, image);
 				
 				Datatype attribute = create(Attribute.class);
-				image = ImageProvider.createImage(SchemaMaintainanceMasterDetailLabelProvider.getInstance().getImage(schemaElement));;
+				image = ImageProvider.createImage(SchemaMaintainanceMasterDetailLabelProvider.getInstance().getImage(attribute));
 				new NewDatatypeMenuItem(newElementMenu, treeNode, this, attribute, treeViewer, ID + ATTRIBUTE, null, image);
+
 				// Separator
 				new MenuItem(result, SWT.SEPARATOR);
 
 				// Remove
-				image = ImageProvider.createImage("icons/delete.png");
+				image = ImageProvider.createImage(DELETE_ICON);
 				new RemoveDatatypeMenuItem(result, treeNode, this, treeViewer, ID + REMOVE, null, image);
 			} else if (datatype instanceof Attribute) {
+				newElementMenu.getParentItem().setEnabled(false);
+				
 				// Separator
 				new MenuItem(result, SWT.SEPARATOR);
 
 				// Remove
-				Image image = ImageProvider.createImage("icons/delete.png");
+				Image image = ImageProvider.createImage(DELETE_ICON);
 				new RemoveDatatypeMenuItem(result, treeNode, this, treeViewer, ID + REMOVE, null, image);
 			}
 		}

@@ -3,12 +3,16 @@
  */
 package org.nabucco.testautomation.schema.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Identifier;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.base.HierarchyLevelType;
@@ -23,9 +27,13 @@ public class SchemaElementSearchMsg extends ServiceMessageSupport implements Ser
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "id", "name", "level" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,255;m1,1;", "m0,1;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m1,1;", "m0,1;" };
+    public static final String ID = "id";
+
+    public static final String NAME = "name";
+
+    public static final String LEVEL = "level";
 
     private Identifier id;
 
@@ -38,16 +46,50 @@ public class SchemaElementSearchMsg extends ServiceMessageSupport implements Ser
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(ID, PropertyDescriptorSupport.createBasetype(ID, Identifier.class, 0,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 1,
+                PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(LEVEL, PropertyDescriptorSupport.createEnumeration(LEVEL,
+                HierarchyLevelType.class, 2, PROPERTY_CONSTRAINTS[2], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[0], Identifier.class,
-                PROPERTY_CONSTRAINTS[0], this.id));
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[1], Name.class,
-                PROPERTY_CONSTRAINTS[1], this.name));
-        properties.add(new EnumProperty<HierarchyLevelType>(PROPERTY_NAMES[2],
-                HierarchyLevelType.class, PROPERTY_CONSTRAINTS[2], this.level));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(SchemaElementSearchMsg.getPropertyDescriptor(ID),
+                this.id));
+        properties.add(super.createProperty(SchemaElementSearchMsg.getPropertyDescriptor(NAME),
+                this.name));
+        properties.add(super.createProperty(SchemaElementSearchMsg.getPropertyDescriptor(LEVEL),
+                this.level));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(ID) && (property.getType() == Identifier.class))) {
+            this.setId(((Identifier) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(LEVEL) && (property.getType() == HierarchyLevelType.class))) {
+            this.setLevel(((HierarchyLevelType) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -91,18 +133,6 @@ public class SchemaElementSearchMsg extends ServiceMessageSupport implements Ser
         result = ((PRIME * result) + ((this.name == null) ? 0 : this.name.hashCode()));
         result = ((PRIME * result) + ((this.level == null) ? 0 : this.level.hashCode()));
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<SchemaElementSearchMsg>\n");
-        appendable.append(super.toString());
-        appendable.append((("<id>" + this.id) + "</id>\n"));
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<level>" + this.level) + "</level>\n"));
-        appendable.append("</SchemaElementSearchMsg>\n");
-        return appendable.toString();
     }
 
     @Override
@@ -162,5 +192,26 @@ public class SchemaElementSearchMsg extends ServiceMessageSupport implements Ser
      */
     public void setLevel(HierarchyLevelType level) {
         this.level = level;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(SchemaElementSearchMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(SchemaElementSearchMsg.class)
+                .getAllProperties();
     }
 }

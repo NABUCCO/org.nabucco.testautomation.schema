@@ -23,7 +23,11 @@ import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigLis
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.SchemaMaintainanceMultiplePageEditView;
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.model.SchemaMaintainanceMultiplePageEditViewModel;
 
-
+/**
+ * OpenSchemaConfigSelectedInSearchResultListViewTableHandlerImpl
+ * 
+ * @author Markus Jorroch, PRODYNA AG
+ */
 public class OpenSchemaConfigSelectedInSearchResultListViewTableHandlerImpl extends AbstractOpenCorrespondingEditViewHandlerImpl<SchemaMaintainanceMultiplePageEditViewModel, SchemaConfig>
 	implements OpenSchemaConfigSelectedInSearchResultListViewTableHandler {
 
@@ -32,7 +36,6 @@ public class OpenSchemaConfigSelectedInSearchResultListViewTableHandlerImpl exte
 		run();
 	}
 	
-
 	@Override
 	protected String getEditorViewId() {
 		return SchemaMaintainanceMultiplePageEditView.ID;
@@ -48,6 +51,5 @@ public class OpenSchemaConfigSelectedInSearchResultListViewTableHandlerImpl exte
 			SchemaConfig schemaConfig) {
 		
 		model.setSchemaConfig(schemaConfig);
-
 	}
 }

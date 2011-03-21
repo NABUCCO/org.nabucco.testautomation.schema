@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.search;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
@@ -35,37 +35,15 @@ public class SearchSchemaElementDelegate extends ServiceDelegateSupport {
     /**
      * SearchSchemaElement.
      *
+     * @param session the NabuccoSession.
      * @param rq the SchemaElementSearchMsg.
      * @return the SchemaElementListMsg.
      * @throws SearchException
      */
-    public SchemaElementListMsg searchSchemaElement(SchemaElementSearchMsg rq)
-            throws SearchException {
+    public SchemaElementListMsg searchSchemaElement(SchemaElementSearchMsg rq,
+            NabuccoSession session) throws SearchException {
         ServiceRequest<SchemaElementSearchMsg> request = new ServiceRequest<SchemaElementSearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<SchemaElementListMsg> rs;
-        if ((service != null)) {
-            rs = service.searchSchemaElement(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchSchemaElement.searchSchemaElement");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * SearchSchemaElement.
-     *
-     * @param subject the Subject.
-     * @param rq the SchemaElementSearchMsg.
-     * @return the SchemaElementListMsg.
-     * @throws SearchException
-     */
-    public SchemaElementListMsg searchSchemaElement(SchemaElementSearchMsg rq, Subject subject)
-            throws SearchException {
-        ServiceRequest<SchemaElementSearchMsg> request = new ServiceRequest<SchemaElementSearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaElementListMsg> rs;
         if ((service != null)) {

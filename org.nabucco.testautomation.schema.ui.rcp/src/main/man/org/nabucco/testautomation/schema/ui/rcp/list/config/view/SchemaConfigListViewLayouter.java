@@ -33,12 +33,9 @@ import org.nabucco.framework.plugin.base.view.NabuccoFormToolkit;
 import org.nabucco.framework.plugin.base.view.NabuccoMessageManager;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
 import org.nabucco.testautomation.schema.ui.rcp.list.config.model.SchemaConfigListViewModel;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewSchemaConfigDescriptionComparator;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewSchemaConfigDescriptionLabelProvider;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewSchemaConfigNameComparator;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewSchemaConfigNameLabelProvider;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewTableFilter;
-import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigListViewWidgetFactory;
+import org.nabucco.testautomation.schema.ui.rcp.list.config.view.comparator.SchemaConfigListViewOwnerComparator;
+import org.nabucco.testautomation.schema.ui.rcp.list.config.view.label.SchemaConfigListViewOwnerLabelProvider;
+import org.nabucco.testautomation.schema.ui.rcp.list.config.view.label.SchemaConfigListViewSchemaConfigKeyLabelProvider;
 
 
 /**
@@ -46,6 +43,14 @@ import org.nabucco.testautomation.schema.ui.rcp.list.config.view.SchemaConfigLis
  * 
  */
 public class SchemaConfigListViewLayouter extends NabuccoAbstractListLayouter<SchemaConfigListViewModel> {
+
+	private static final String OWNER_COLUMN_KEY = "org.nabucco.testautomation.schema.ui.rcp.list.config.view.owner";
+	
+	private static final String DESCRIPTION_COLUMN_KEY = "org.nabucco.testautomation.schema.ui.rcp.list.config.view.description";
+	
+	private static final String NAME_COLUMN_KEY = "org.nabucco.testautomation.schema.ui.rcp.list.config.view.name";
+	
+	private static final String KEY_COLUMN_KEY = "org.nabucco.testautomation.schema.ui.rcp.list.config.view.key";
 
 	/**
 	 * Layouts the table
@@ -73,8 +78,8 @@ public class SchemaConfigListViewLayouter extends NabuccoAbstractListLayouter<Sc
 	private List<Comparator<SchemaConfig>> createComparators() {
 		List<Comparator<SchemaConfig>> comparators = new ArrayList<Comparator<SchemaConfig>>();
 		comparators.add(new SchemaConfigListViewSchemaConfigNameComparator());
-		comparators
-				.add(new SchemaConfigListViewSchemaConfigDescriptionComparator());
+		comparators.add(new SchemaConfigListViewSchemaConfigDescriptionComparator());
+		comparators.add(new SchemaConfigListViewOwnerComparator());
 
 		return comparators;
 	}
@@ -86,17 +91,25 @@ public class SchemaConfigListViewLayouter extends NabuccoAbstractListLayouter<Sc
 	 */
 	private NabuccoTableColumnInfo[] createTableColumnInfo() {
 		NabuccoTableColumnInfo[] result = {
-				new NabuccoTableColumnInfo("name",
-						"This is a SchemaConfig name.", 200, SWT.CENTER,
+				new NabuccoTableColumnInfo(KEY_COLUMN_KEY,
+						KEY_COLUMN_KEY, 200, SWT.LEFT,
+						SWT.CENTER,
+						new SchemaConfigListViewSchemaConfigKeyLabelProvider()),
+				new NabuccoTableColumnInfo(NAME_COLUMN_KEY,
+						NAME_COLUMN_KEY, 400, SWT.LEFT,
 						SWT.CENTER,
 						new SchemaConfigListViewSchemaConfigNameLabelProvider()),
 				new NabuccoTableColumnInfo(
-						"Description",
-						"This is a SchemaConfig description",
-						300,
-						SWT.RIGHT,
-						SWT.RIGHT,
-						new SchemaConfigListViewSchemaConfigDescriptionLabelProvider()) };
+						DESCRIPTION_COLUMN_KEY,
+						DESCRIPTION_COLUMN_KEY,
+						400,
+						SWT.LEFT,
+						SWT.LEFT,
+						new SchemaConfigListViewSchemaConfigDescriptionLabelProvider()),
+                new NabuccoTableColumnInfo(OWNER_COLUMN_KEY,
+		        		OWNER_COLUMN_KEY, 200,
+		                SWT.LEFT, SWT.LEFT,
+		                new SchemaConfigListViewOwnerLabelProvider()) };
 
 		return result;
 	}

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.framework.base.facade.datatype.Owner;
 import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchModel;
@@ -49,10 +50,12 @@ public class SchemaConfigSearchBusinessModel implements
 	 */
 	@Override
 	public SchemaConfigListViewBrowserElement search(
-			NabuccoComponentSearchParameter searchViewModel) {
+			NabuccoComponentSearchParameter parameter) {
+		
 		SchemaConfigListViewBrowserElement result = null;
-		if (searchViewModel instanceof SchemaConfigSearchViewModel) {
-			SchemaConfigSearchViewModel testSchemaConfigViewModel = (SchemaConfigSearchViewModel) searchViewModel;
+		
+		if (parameter instanceof SchemaConfigSearchViewModel) {
+			SchemaConfigSearchViewModel testSchemaConfigViewModel = (SchemaConfigSearchViewModel) parameter;
 			SchemaConfigSearchMsg rq = createSchemaConfigSearchMsg(testSchemaConfigViewModel);
 			result = new SchemaConfigListViewBrowserElement(search(rq).toArray(
 					new SchemaConfig[0]));
@@ -61,6 +64,7 @@ public class SchemaConfigSearchBusinessModel implements
 	}
 
 	private List<SchemaConfig> search(final SchemaConfigSearchMsg rq) {
+		
 		List<SchemaConfig> result = null;
 		try {
 			SearchSchemaConfigDelegate searchDelegate = SchemaComponentServiceDelegateFactory
@@ -76,16 +80,22 @@ public class SchemaConfigSearchBusinessModel implements
 
 	private SchemaConfigSearchMsg createSchemaConfigSearchMsg(
 			SchemaConfigSearchViewModel searchViewModel) {
+		
 		SchemaConfigSearchMsg result = new SchemaConfigSearchMsg();
+		String owner = searchViewModel.getOwner();
 
-		result.setName(getNameFromModel(searchViewModel));
-		result.setDescription(getDescriptionFromModel(searchViewModel));
+        if (owner != null && owner.length() > 0) {
+        	result.setOwner(new Owner(owner));
+        }
+		result.setName(getName(searchViewModel));
+		result.setDescription(getDescription(searchViewModel));
 
 		return result;
 	}
 
-	private Description getDescriptionFromModel(
+	private Description getDescription(
 			final SchemaConfigSearchViewModel searchViewModel) {
+		
 		Description result = new Description();
 		String description = searchViewModel.getSchemaConfigDescription();
 
@@ -94,7 +104,8 @@ public class SchemaConfigSearchBusinessModel implements
 		return result;
 	}
 
-	private Name getNameFromModel(SchemaConfigSearchViewModel searchViewModel) {
+	private Name getName(SchemaConfigSearchViewModel searchViewModel) {
+		
 		Name result = new Name();
 		String name = searchViewModel.getSchemaConfigName();
 

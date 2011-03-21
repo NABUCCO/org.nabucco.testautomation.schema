@@ -63,4 +63,35 @@ public class ProduceSchemaConfigDelegate extends ServiceDelegateSupport {
         throw new ClientException(
                 "Cannot execute service operation: ProduceSchemaConfig.produceSchemaConfig");
     }
+
+    /**
+     * ProduceSchemaConfigClone.
+     *
+     * @param rq the SchemaConfigMsg.
+     * @return the SchemaConfigMsg.
+     * @throws ClientException
+     */
+    public SchemaConfigMsg produceSchemaConfigClone(SchemaConfigMsg rq) throws ClientException {
+        ServiceRequest<SchemaConfigMsg> request = new ServiceRequest<SchemaConfigMsg>(
+                super.createServiceContext());
+        request.setRequestMessage(rq);
+        ServiceResponse<SchemaConfigMsg> rs;
+        if ((service != null)) {
+            long start = System.currentTimeMillis();
+            try {
+                rs = service.produceSchemaConfigClone(request);
+                return rs.getResponseMessage();
+            } catch (Exception exception) {
+                super.processException(exception);
+            } finally {
+                long end = System.currentTimeMillis();
+                Activator.getDefault().logDebug(
+                        new NabuccoLogMessage(ProduceSchemaConfigDelegate.class, "Service: ",
+                                "ProduceSchemaConfig.produceSchemaConfigClone", " Time: ", String
+                                        .valueOf((end - start)), "ms."));
+            }
+        }
+        throw new ClientException(
+                "Cannot execute service operation: ProduceSchemaConfig.produceSchemaConfigClone");
+    }
 }

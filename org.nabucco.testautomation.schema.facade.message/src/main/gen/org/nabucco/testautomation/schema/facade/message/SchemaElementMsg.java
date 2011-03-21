@@ -3,9 +3,15 @@
  */
 package org.nabucco.testautomation.schema.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
@@ -20,9 +26,9 @@ public class SchemaElementMsg extends ServiceMessageSupport implements ServiceMe
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "schemaElement" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;" };
+
+    public static final String SCHEMAELEMENT = "schemaElement";
 
     private SchemaElement schemaElement;
 
@@ -31,12 +37,37 @@ public class SchemaElementMsg extends ServiceMessageSupport implements ServiceMe
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(SCHEMAELEMENT, PropertyDescriptorSupport.createDatatype(SCHEMAELEMENT,
+                SchemaElement.class, 0, PROPERTY_CONSTRAINTS[0], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new DatatypeProperty<SchemaElement>(PROPERTY_NAMES[0], SchemaElement.class,
-                PROPERTY_CONSTRAINTS[0], this.schemaElement));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(SchemaElementMsg.getPropertyDescriptor(SCHEMAELEMENT),
+                this.schemaElement));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(SCHEMAELEMENT) && (property.getType() == SchemaElement.class))) {
+            this.setSchemaElement(((SchemaElement) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -72,16 +103,6 @@ public class SchemaElementMsg extends ServiceMessageSupport implements ServiceMe
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<SchemaElementMsg>\n");
-        appendable.append(super.toString());
-        appendable.append((("<schemaElement>" + this.schemaElement) + "</schemaElement>\n"));
-        appendable.append("</SchemaElementMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
     }
@@ -102,5 +123,25 @@ public class SchemaElementMsg extends ServiceMessageSupport implements ServiceMe
      */
     public void setSchemaElement(SchemaElement schemaElement) {
         this.schemaElement = schemaElement;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(SchemaElementMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(SchemaElementMsg.class).getAllProperties();
     }
 }

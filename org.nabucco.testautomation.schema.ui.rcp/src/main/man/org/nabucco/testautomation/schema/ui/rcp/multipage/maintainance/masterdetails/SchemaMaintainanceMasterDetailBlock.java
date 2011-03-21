@@ -60,7 +60,9 @@ public class SchemaMaintainanceMasterDetailBlock extends
         
     	invisibleProperties.add("id");
     	invisibleProperties.add("version");
+    	readOnlyProperties.add("owner");
         readOnlyProperties.add("level");
+        readOnlyProperties.add("identificationKey");
         
         detailsPart.registerPage(SchemaElement.class, new TestautomationDetailPageView<SchemaMaintainanceMultiplePageEditViewModel>(this,
                 getManagedForm(), getManagedFormViewPart(), nabuccoMessageManager, ID, ID
@@ -68,7 +70,7 @@ public class SchemaMaintainanceMasterDetailBlock extends
         
         detailsPart.registerPage(SchemaConfig.class, new TestautomationDetailPageView<SchemaMaintainanceMultiplePageEditViewModel>(this,
                 getManagedForm(), getManagedFormViewPart(), nabuccoMessageManager, ID, ID
-                        + "SchemaConfig", invisibleProperties, new HashSet<String>()));
+                        + "SchemaConfig", invisibleProperties, readOnlyProperties));
         
         invisibleProperties.add("type");
         detailsPart.registerPage(Attribute.class, new TestautomationDetailPageView<SchemaMaintainanceMultiplePageEditViewModel>(this, getManagedForm(),

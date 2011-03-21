@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.produce;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.ProduceException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
@@ -35,36 +35,15 @@ public class ProduceSchemaElementDelegate extends ServiceDelegateSupport {
     /**
      * ProduceSchemaElement.
      *
+     * @param session the NabuccoSession.
      * @param rq the EmptyServiceMessage.
      * @return the SchemaElementMsg.
      * @throws ProduceException
      */
-    public SchemaElementMsg produceSchemaElement(EmptyServiceMessage rq) throws ProduceException {
-        ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<SchemaElementMsg> rs;
-        if ((service != null)) {
-            rs = service.produceSchemaElement(request);
-        } else {
-            throw new ProduceException(
-                    "Cannot execute service operation: ProduceSchemaElement.produceSchemaElement");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * ProduceSchemaElement.
-     *
-     * @param subject the Subject.
-     * @param rq the EmptyServiceMessage.
-     * @return the SchemaElementMsg.
-     * @throws ProduceException
-     */
-    public SchemaElementMsg produceSchemaElement(EmptyServiceMessage rq, Subject subject)
+    public SchemaElementMsg produceSchemaElement(EmptyServiceMessage rq, NabuccoSession session)
             throws ProduceException {
         ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaElementMsg> rs;
         if ((service != null)) {

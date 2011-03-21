@@ -16,6 +16,7 @@
 */
 package org.nabucco.testautomation.schema.impl.service.produce;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
 import org.nabucco.framework.base.facade.exception.service.ProduceException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
@@ -41,6 +42,7 @@ public class ProduceSchemaConfigServiceHandlerImpl extends ProduceSchemaConfigSe
 		SchemaConfig schemaConfig = new SchemaConfig();
 		schemaConfig.setDatatypeState(DatatypeState.INITIALIZED);
 		schemaConfig.setName("Enter name ...");
+		schemaConfig.setOwner(NabuccoInstance.getInstance().getOwner());
 		rs.setSchemaConfig(schemaConfig);
 		return rs;
 	}

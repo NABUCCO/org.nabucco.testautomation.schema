@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionAccessor;
 import org.nabucco.framework.base.facade.datatype.visitor.DatatypeVisitor;
@@ -44,6 +45,8 @@ import org.nabucco.testautomation.schema.impl.service.maintain.visitor.SchemaEle
 public class MaintainSchemaConfigServiceHandlerImpl extends	MaintainSchemaConfigServiceHandler {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final String PREFIX = "SCMA-";
 	
 	private PersistenceHelper persistenceHelper;
 	
@@ -136,9 +139,17 @@ public class MaintainSchemaConfigServiceHandlerImpl extends	MaintainSchemaConfig
 		for (int i = 0; i < schemaElementList.size(); i++) {
 			SchemaElement updatedSchemaElement = create(schemaElementList.get(i));
 			schemaElementList.set(i, updatedSchemaElement);
-		} 
+		}
+		
+		if (entity.getOwner() == null || entity.getOwner().getValue() == null
+				|| entity.getOwner().getValue().equals("")) {
+			entity.setOwner(NabuccoInstance.getInstance().getOwner());
+		}
 		
 		entity = this.persistenceHelper.persist(entity);
+		entity.setIdentificationKey(PREFIX + entity.getId());
+        entity.setDatatypeState(DatatypeState.MODIFIED);
+        entity = this.persistenceHelper.persist(entity);
 		return entity;
 	}
 	
@@ -305,7 +316,7 @@ public class MaintainSchemaConfigServiceHandlerImpl extends	MaintainSchemaConfig
 	
 	private boolean isInUse(SchemaConfig config) {
 		
-		Query query = this.getEntityManager().createNativeQuery("SELECT id FROM conf_test_configuration WHERE schemaConfigRefId = :refId");
+		Query query = this.getEntityManager().createNativeQuery("SELECT id FROM conf_test_configuration WHERE schema_config_ref_id = :refId");
 		query.setParameter("refId", config.getId());
 		
 		@SuppressWarnings("rawtypes")
@@ -315,7 +326,7 @@ public class MaintainSchemaConfigServiceHandlerImpl extends	MaintainSchemaConfig
 	
 	private boolean isInUse(SchemaElement element) {
 		
-		Query query = this.getEntityManager().createNativeQuery("SELECT id FROM conf_test_config_element WHERE schemaElementRefId = :refId");
+		Query query = this.getEntityManager().createNativeQuery("SELECT id FROM conf_test_config_element WHERE schema_element_ref_id = :refId");
 		query.setParameter("refId", element.getId());
 		
 		@SuppressWarnings("rawtypes")

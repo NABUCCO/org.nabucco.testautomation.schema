@@ -7,6 +7,8 @@ import org.nabucco.framework.base.facade.exception.service.ServiceException;
 import org.nabucco.framework.base.facade.service.componentrelation.ComponentRelationService;
 import org.nabucco.framework.base.impl.component.ComponentSupport;
 import org.nabucco.testautomation.schema.facade.component.SchemaComponent;
+import org.nabucco.testautomation.schema.facade.service.export.ExportSchema;
+import org.nabucco.testautomation.schema.facade.service.importing.ImportSchema;
 import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchemaConfig;
 import org.nabucco.testautomation.schema.facade.service.produce.ProduceAttribute;
 import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaConfig;
@@ -37,6 +39,10 @@ public class SchemaComponentImpl extends ComponentSupport implements SchemaCompo
     private SearchSchemaConfig searchSchemaConfig;
 
     private SearchSchemaElement searchSchemaElement;
+
+    private ExportSchema exportSchema;
+
+    private ImportSchema importSchema;
 
     /** Constructs a new SchemaComponentImpl instance. */
     public SchemaComponentImpl() {
@@ -100,5 +106,23 @@ public class SchemaComponentImpl extends ComponentSupport implements SchemaCompo
      */
     public SearchSchemaElement getSearchSchemaElement() {
         return this.searchSchemaElement;
+    }
+
+    /**
+     * Getter for the ExportSchema.
+     *
+     * @return the ExportSchema.
+     */
+    public ExportSchema getExportSchema() {
+        return this.exportSchema;
+    }
+
+    /**
+     * Getter for the ImportSchema.
+     *
+     * @return the ImportSchema.
+     */
+    public ImportSchema getImportSchema() {
+        return this.importSchema;
     }
 }

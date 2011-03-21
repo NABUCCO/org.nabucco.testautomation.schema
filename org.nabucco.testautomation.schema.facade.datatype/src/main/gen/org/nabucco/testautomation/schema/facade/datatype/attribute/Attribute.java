@@ -3,15 +3,19 @@
  */
 package org.nabucco.testautomation.schema.facade.datatype.attribute;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Flag;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.schema.facade.datatype.attribute.AttributeType;
 
 /**
@@ -23,10 +27,16 @@ public class Attribute extends NabuccoDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "name", "description", "mandatory", "type" };
-
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m0,1;",
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "l0,255;m0,1;",
             "l0,n;m1,1;", "m1,1;" };
+
+    public static final String NAME = "name";
+
+    public static final String DESCRIPTION = "description";
+
+    public static final String MANDATORY = "mandatory";
+
+    public static final String TYPE = "type";
 
     private Name name;
 
@@ -65,23 +75,64 @@ public class Attribute extends NabuccoDatatype implements Datatype {
         clone.setType(this.getType());
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 2,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION,
+                Description.class, 3, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(MANDATORY, PropertyDescriptorSupport.createBasetype(MANDATORY, Flag.class,
+                4, PROPERTY_CONSTRAINTS[2], false));
+        propertyMap.put(TYPE, PropertyDescriptorSupport.createEnumeration(TYPE,
+                AttributeType.class, 5, PROPERTY_CONSTRAINTS[3], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
     public void init() {
         this.initDefaults();
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.name));
-        properties.add(new BasetypeProperty<Description>(PROPERTY_NAMES[1], Description.class,
-                PROPERTY_CONSTRAINTS[1], this.description));
-        properties.add(new BasetypeProperty<Flag>(PROPERTY_NAMES[2], Flag.class,
-                PROPERTY_CONSTRAINTS[2], this.mandatory));
-        properties.add(new EnumProperty<AttributeType>(PROPERTY_NAMES[3], AttributeType.class,
-                PROPERTY_CONSTRAINTS[3], this.type));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties
+                .add(super.createProperty(Attribute.getPropertyDescriptor(NAME), this.name, null));
+        properties.add(super.createProperty(Attribute.getPropertyDescriptor(DESCRIPTION),
+                this.description, null));
+        properties.add(super.createProperty(Attribute.getPropertyDescriptor(MANDATORY),
+                this.mandatory, null));
+        properties
+                .add(super.createProperty(Attribute.getPropertyDescriptor(TYPE), this.type, null));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(DESCRIPTION) && (property.getType() == Description.class))) {
+            this.setDescription(((Description) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(MANDATORY) && (property.getType() == Flag.class))) {
+            this.setMandatory(((Flag) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(TYPE) && (property.getType() == AttributeType.class))) {
+            this.setType(((AttributeType) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -134,19 +185,6 @@ public class Attribute extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<Attribute>\n");
-        appendable.append(super.toString());
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<description>" + this.description) + "</description>\n"));
-        appendable.append((("<mandatory>" + this.mandatory) + "</mandatory>\n"));
-        appendable.append((("<type>" + this.type) + "</type>\n"));
-        appendable.append("</Attribute>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public Attribute cloneObject() {
         Attribute clone = new Attribute();
         this.cloneObject(clone);
@@ -178,6 +216,9 @@ public class Attribute extends NabuccoDatatype implements Datatype {
      */
     public void setName(String name) {
         if ((this.name == null)) {
+            if ((name == null)) {
+                return;
+            }
             this.name = new Name();
         }
         this.name.setValue(name);
@@ -208,6 +249,9 @@ public class Attribute extends NabuccoDatatype implements Datatype {
      */
     public void setDescription(String description) {
         if ((this.description == null)) {
+            if ((description == null)) {
+                return;
+            }
             this.description = new Description();
         }
         this.description.setValue(description);
@@ -238,6 +282,9 @@ public class Attribute extends NabuccoDatatype implements Datatype {
      */
     public void setMandatory(Boolean mandatory) {
         if ((this.mandatory == null)) {
+            if ((mandatory == null)) {
+                return;
+            }
             this.mandatory = new Flag();
         }
         this.mandatory.setValue(mandatory);
@@ -272,5 +319,24 @@ public class Attribute extends NabuccoDatatype implements Datatype {
         } else {
             this.type = AttributeType.valueOf(type);
         }
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(Attribute.class).getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(Attribute.class).getAllProperties();
     }
 }

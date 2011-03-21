@@ -27,7 +27,7 @@ import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.model.Sch
 /**
  * CreateSchemaConfigCommandHandlerImpl
  * 
- * @author Markus Jorroch, PRODYNA AG, 2010-06-10
+ * @author Markus Jorroch, PRODYNA AG
  */
 public class CreateSchemaConfigCommandHandlerImpl
         extends
@@ -52,4 +52,5 @@ public class CreateSchemaConfigCommandHandlerImpl
     protected void updateModel(SchemaMaintainanceMultiplePageEditViewModel model) {
         model.setSchemaConfig(handler.createDefaultDatatype());
     }
+    
 }

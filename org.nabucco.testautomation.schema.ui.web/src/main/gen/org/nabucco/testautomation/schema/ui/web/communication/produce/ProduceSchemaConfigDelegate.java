@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.schema.ui.web.communication.produce;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.ProduceException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
@@ -35,13 +35,15 @@ public class ProduceSchemaConfigDelegate extends ServiceDelegateSupport {
     /**
      * ProduceSchemaConfig.
      *
+     * @param session the NabuccoSession.
      * @param rq the EmptyServiceMessage.
      * @return the SchemaConfigMsg.
      * @throws ProduceException
      */
-    public SchemaConfigMsg produceSchemaConfig(EmptyServiceMessage rq) throws ProduceException {
+    public SchemaConfigMsg produceSchemaConfig(EmptyServiceMessage rq, NabuccoSession session)
+            throws ProduceException {
         ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext());
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaConfigMsg> rs;
         if ((service != null)) {
@@ -54,24 +56,24 @@ public class ProduceSchemaConfigDelegate extends ServiceDelegateSupport {
     }
 
     /**
-     * ProduceSchemaConfig.
+     * ProduceSchemaConfigClone.
      *
-     * @param subject the Subject.
-     * @param rq the EmptyServiceMessage.
+     * @param session the NabuccoSession.
+     * @param rq the SchemaConfigMsg.
      * @return the SchemaConfigMsg.
      * @throws ProduceException
      */
-    public SchemaConfigMsg produceSchemaConfig(EmptyServiceMessage rq, Subject subject)
+    public SchemaConfigMsg produceSchemaConfigClone(SchemaConfigMsg rq, NabuccoSession session)
             throws ProduceException {
-        ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext(subject));
+        ServiceRequest<SchemaConfigMsg> request = new ServiceRequest<SchemaConfigMsg>(
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<SchemaConfigMsg> rs;
         if ((service != null)) {
-            rs = service.produceSchemaConfig(request);
+            rs = service.produceSchemaConfigClone(request);
         } else {
             throw new ProduceException(
-                    "Cannot execute service operation: ProduceSchemaConfig.produceSchemaConfig");
+                    "Cannot execute service operation: ProduceSchemaConfig.produceSchemaConfigClone");
         }
         return rs.getResponseMessage();
     }

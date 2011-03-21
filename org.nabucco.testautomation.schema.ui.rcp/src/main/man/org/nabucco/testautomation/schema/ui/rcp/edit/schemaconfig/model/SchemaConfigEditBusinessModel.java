@@ -23,6 +23,7 @@ import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
 import org.nabucco.testautomation.schema.facade.message.SchemaConfigMsg;
 import org.nabucco.testautomation.schema.ui.rcp.communication.SchemaComponentServiceDelegateFactory;
 import org.nabucco.testautomation.schema.ui.rcp.communication.maintain.MaintainSchemaConfigDelegate;
+import org.nabucco.testautomation.schema.ui.rcp.communication.produce.ProduceSchemaConfigDelegate;
 
 
 /**
@@ -90,6 +91,19 @@ public class SchemaConfigEditBusinessModel implements BusinessModel, Loggable {
 	@Override
 	public String getID() {
 		return SchemaConfigEditBusinessModel.ID;
+	}
+
+	public SchemaConfig importDatatype(SchemaConfig schemaConfig) throws ClientException {
+		SchemaComponentServiceDelegateFactory schemaComponentServiceDelegateFactory = SchemaComponentServiceDelegateFactory
+		.getInstance();
+
+		ProduceSchemaConfigDelegate produceSchemaConfigDelegate = schemaComponentServiceDelegateFactory.getProduceSchemaConfig();
+		SchemaConfigMsg rq = createSchemaConfigMsg(schemaConfig);
+		SchemaConfigMsg response = produceSchemaConfigDelegate.produceSchemaConfigClone(rq); 
+		if (response != null) {
+			return response.getSchemaConfig();
+		}
+		return schemaConfig;
 	}
 
 }

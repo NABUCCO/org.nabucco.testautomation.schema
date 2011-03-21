@@ -27,7 +27,11 @@ import org.nabucco.testautomation.schema.ui.rcp.command.schemaconfig.ReadSchemaC
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.SchemaMaintainanceMultiplePageEditView;
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.model.SchemaMaintainanceMultiplePageEditViewModel;
 
-
+/**
+ * ReadSchemaConfigHandlerImpl
+ * 
+ * @author Markus Jorroch, PRODYNA AG
+ */
 public class ReadSchemaConfigHandlerImpl
         extends
         AbstractOpenEditViewHandler<SchemaMaintainanceMultiplePageEditViewModel, SchemaMaintainanceMultiplePageEditView>

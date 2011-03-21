@@ -23,8 +23,8 @@ import org.nabucco.testautomation.schema.ui.rcp.command.schemaconfig.SaveSchemaC
 import org.nabucco.testautomation.schema.ui.rcp.edit.schemaconfig.model.SchemaConfigEditBusinessModel;
 import org.nabucco.testautomation.schema.ui.rcp.multipage.maintainance.model.SchemaMaintainanceMultiplePageEditViewModel;
 
-
 /**
+ * SaveSchemaConfigHandlerImpl
  * 
  * @author Markus Jorroch, PRODYNA AG
  */
