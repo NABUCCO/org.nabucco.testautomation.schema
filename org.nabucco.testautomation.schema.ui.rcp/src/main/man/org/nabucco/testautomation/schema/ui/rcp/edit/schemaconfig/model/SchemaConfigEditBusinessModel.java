@@ -1,19 +1,19 @@
 /*
-* Copyright 2010 PRODYNA AG
-*
-* Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-* http://www.opensource.org/licenses/eclipse-1.0.php or
-* http://www.nabucco-source.org/nabucco-license.html
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright 2012 PRODYNA AG
+ *
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.nabucco.testautomation.schema.ui.rcp.edit.schemaconfig.model;
 
 import org.nabucco.framework.base.facade.exception.client.ClientException;
@@ -22,8 +22,8 @@ import org.nabucco.framework.plugin.base.model.BusinessModel;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
 import org.nabucco.testautomation.schema.facade.message.SchemaConfigMsg;
 import org.nabucco.testautomation.schema.ui.rcp.communication.SchemaComponentServiceDelegateFactory;
-import org.nabucco.testautomation.schema.ui.rcp.communication.maintain.MaintainSchemaConfigDelegate;
-import org.nabucco.testautomation.schema.ui.rcp.communication.produce.ProduceSchemaConfigDelegate;
+import org.nabucco.testautomation.schema.ui.rcp.communication.maintain.MaintainSchemaDelegate;
+import org.nabucco.testautomation.schema.ui.rcp.communication.produce.ProduceSchemaDelegate;
 
 
 /**
@@ -47,8 +47,8 @@ public class SchemaConfigEditBusinessModel implements BusinessModel, Loggable {
 		SchemaComponentServiceDelegateFactory schemaComponentServiceDelegateFactory = SchemaComponentServiceDelegateFactory
 		.getInstance();
 
-		MaintainSchemaConfigDelegate maintainSchemaConfigDelegate = schemaComponentServiceDelegateFactory
-		.getMaintainSchemaConfig();
+		MaintainSchemaDelegate maintainSchemaConfigDelegate = schemaComponentServiceDelegateFactory
+		.getMaintainSchema();
 
 		SchemaConfigMsg rq = createSchemaConfigMsg(schemaConfig);
 		SchemaConfigMsg response = maintainSchemaConfigDelegate
@@ -71,8 +71,8 @@ public class SchemaConfigEditBusinessModel implements BusinessModel, Loggable {
     	SchemaComponentServiceDelegateFactory configComponent = SchemaComponentServiceDelegateFactory
                 .getInstance();
 
-    	MaintainSchemaConfigDelegate maintainDelegate = configComponent
-                .getMaintainSchemaConfig();
+    	MaintainSchemaDelegate maintainDelegate = configComponent
+                .getMaintainSchema();
 
         SchemaConfigMsg request = this.createSchemaConfigMsg(schemaConfig);
         maintainDelegate.maintainSchemaConfig(request);
@@ -97,7 +97,7 @@ public class SchemaConfigEditBusinessModel implements BusinessModel, Loggable {
 		SchemaComponentServiceDelegateFactory schemaComponentServiceDelegateFactory = SchemaComponentServiceDelegateFactory
 		.getInstance();
 
-		ProduceSchemaConfigDelegate produceSchemaConfigDelegate = schemaComponentServiceDelegateFactory.getProduceSchemaConfig();
+		ProduceSchemaDelegate produceSchemaConfigDelegate = schemaComponentServiceDelegateFactory.getProduceSchema();
 		SchemaConfigMsg rq = createSchemaConfigMsg(schemaConfig);
 		SchemaConfigMsg response = produceSchemaConfigDelegate.produceSchemaConfigClone(rq); 
 		if (response != null) {

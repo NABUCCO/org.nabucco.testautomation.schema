@@ -1,18 +1,24 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.facade.component;
 
 import org.nabucco.framework.base.facade.component.Component;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
-import org.nabucco.testautomation.schema.facade.service.export.ExportSchema;
-import org.nabucco.testautomation.schema.facade.service.importing.ImportSchema;
-import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceAttribute;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaElement;
-import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaElement;
+import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchema;
+import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchema;
+import org.nabucco.testautomation.schema.facade.service.search.SearchSchema;
 
 /**
  * SchemaComponent<p/>Component for TestAutomation schemas<p/>
@@ -24,67 +30,31 @@ public interface SchemaComponent extends Component {
 
     final String COMPONENT_NAME = "org.nabucco.testautomation.schema";
 
-    /**
-     * Getter for the MaintainSchemaConfig.
-     *
-     * @return the MaintainSchemaConfig.
-     * @throws ServiceException
-     */
-    MaintainSchemaConfig getMaintainSchemaConfig() throws ServiceException;
+    final String COMPONENT_PREFIX = "scma";
+
+    final String JNDI_NAME = ((((JNDI_PREFIX + "/") + COMPONENT_NAME) + "/") + "org.nabucco.testautomation.schema.facade.component.SchemaComponent");
 
     /**
-     * Getter for the ProduceSchemaConfig.
+     * Getter for the MaintainSchema.
      *
-     * @return the ProduceSchemaConfig.
+     * @return the MaintainSchema.
      * @throws ServiceException
      */
-    ProduceSchemaConfig getProduceSchemaConfig() throws ServiceException;
+    MaintainSchema getMaintainSchema() throws ServiceException;
 
     /**
-     * Getter for the ProduceSchemaElement.
+     * Getter for the ProduceSchema.
      *
-     * @return the ProduceSchemaElement.
+     * @return the ProduceSchema.
      * @throws ServiceException
      */
-    ProduceSchemaElement getProduceSchemaElement() throws ServiceException;
+    ProduceSchema getProduceSchema() throws ServiceException;
 
     /**
-     * Getter for the ProduceAttribute.
+     * Getter for the SearchSchema.
      *
-     * @return the ProduceAttribute.
+     * @return the SearchSchema.
      * @throws ServiceException
      */
-    ProduceAttribute getProduceAttribute() throws ServiceException;
-
-    /**
-     * Getter for the SearchSchemaConfig.
-     *
-     * @return the SearchSchemaConfig.
-     * @throws ServiceException
-     */
-    SearchSchemaConfig getSearchSchemaConfig() throws ServiceException;
-
-    /**
-     * Getter for the SearchSchemaElement.
-     *
-     * @return the SearchSchemaElement.
-     * @throws ServiceException
-     */
-    SearchSchemaElement getSearchSchemaElement() throws ServiceException;
-
-    /**
-     * Getter for the ExportSchema.
-     *
-     * @return the ExportSchema.
-     * @throws ServiceException
-     */
-    ExportSchema getExportSchema() throws ServiceException;
-
-    /**
-     * Getter for the ImportSchema.
-     *
-     * @return the ImportSchema.
-     * @throws ServiceException
-     */
-    ImportSchema getImportSchema() throws ServiceException;
+    SearchSchema getSearchSchema() throws ServiceException;
 }

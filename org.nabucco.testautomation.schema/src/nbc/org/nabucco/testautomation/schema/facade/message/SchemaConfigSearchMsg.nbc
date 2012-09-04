@@ -16,10 +16,10 @@
 */
 package org.nabucco.testautomation.schema.facade.message;
 
-import org.nabucco.framework.base.facade.datatype.Owner;
-import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Identifier;
+import org.nabucco.framework.base.facade.datatype.Key;
+import org.nabucco.framework.base.facade.datatype.Name;
 
 @Author			Steffen Schmidt
 @Company		PRODYNA AG
@@ -28,11 +28,11 @@ import org.nabucco.framework.base.facade.datatype.Identifier;
 @Description	Message for searching SchemaConfigs
 public Message SchemaConfigSearchMsg {
 
-	private Basetype Owner[0..1] owner;
-	
 	private Basetype Identifier[0..1] id;
 
 	private Basetype Name[0..1] name;
+
+	private Basetype Key[0..1] schemaConfigKey;
 	
 	private Basetype Description[0..1] description;
 

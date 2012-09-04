@@ -1,11 +1,23 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.facade.datatype;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Flag;
@@ -20,7 +32,7 @@ import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescri
 import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
 import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
 import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
-import org.nabucco.testautomation.facade.datatype.base.HierarchyLevelType;
+import org.nabucco.testautomation.property.facade.datatype.base.HierarchyLevelType;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
 import org.nabucco.testautomation.schema.facade.datatype.ScriptContainerType;
 import org.nabucco.testautomation.schema.facade.datatype.attribute.Attribute;
@@ -34,9 +46,9 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;", "m1,1;", "l0,255;m1,1;",
-            "l0,6;m1,1;", "l0,255;m0,1;", "l0,n;m1,1;", "l0,n;m1,1;", "l0,n;m1,1;", "l0,n;m1,1;",
-            "l0,n;m1,1;", "l0,n;m1,1;", "l0,n;m1,1;", "m0,n;", "m0,n;" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;", "m1,1;", "l0,255;u0,n;m1,1;", "l0,6;u0,n;m1,1;",
+            "l0,255;u0,n;m0,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;",
+            "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "l0,n;u0,n;m1,1;", "m0,n;", "m0,n;" };
 
     public static final String LEVEL = "level";
 
@@ -49,6 +61,8 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
     public static final String DESCRIPTION = "description";
 
     public static final String PROPERTYCONTAINER = "propertyContainer";
+
+    public static final String MERGEPROPERTIES = "mergeProperties";
 
     public static final String SKIPABLE = "skipable";
 
@@ -77,6 +91,8 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
     private Description description;
 
     private Flag propertyContainer;
+
+    private Flag mergeProperties;
 
     private Flag skipable;
 
@@ -124,6 +140,9 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
         }
         if ((this.getPropertyContainer() != null)) {
             clone.setPropertyContainer(this.getPropertyContainer().cloneObject());
+        }
+        if ((this.getMergeProperties() != null)) {
+            clone.setMergeProperties(this.getMergeProperties().cloneObject());
         }
         if ((this.getSkipable() != null)) {
             clone.setSkipable(this.getSkipable().cloneObject());
@@ -182,7 +201,7 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
      */
     List<Attribute> getAttributeListJPA() {
         if ((this.attributeList == null)) {
-            this.attributeList = new NabuccoListImpl<Attribute>(NabuccoCollectionState.LAZY);
+            this.attributeList = new NabuccoListImpl<Attribute>(NabuccoCollectionState.EAGER);
         }
         return ((NabuccoListImpl<Attribute>) this.attributeList).getDelegate();
     }
@@ -194,7 +213,7 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
      */
     void setAttributeListJPA(List<Attribute> attributeList) {
         if ((this.attributeList == null)) {
-            this.attributeList = new NabuccoListImpl<Attribute>(NabuccoCollectionState.LAZY);
+            this.attributeList = new NabuccoListImpl<Attribute>(NabuccoCollectionState.EAGER);
         }
         ((NabuccoListImpl<Attribute>) this.attributeList).setDelegate(attributeList);
     }
@@ -206,38 +225,38 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
      */
     protected static NabuccoPropertyContainer createPropertyContainer() {
         Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
-        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
-                .getPropertyMap());
-        propertyMap.put(LEVEL, PropertyDescriptorSupport.createEnumeration(LEVEL,
-                HierarchyLevelType.class, 2, PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class).getPropertyMap());
+        propertyMap.put(LEVEL, PropertyDescriptorSupport.createEnumeration(LEVEL, HierarchyLevelType.class, 3,
+                PROPERTY_CONSTRAINTS[0], false));
         propertyMap.put(SCRIPTSALLOWED, PropertyDescriptorSupport.createEnumeration(SCRIPTSALLOWED,
-                ScriptContainerType.class, 3, PROPERTY_CONSTRAINTS[1], false));
-        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 4,
-                PROPERTY_CONSTRAINTS[2], false));
-        propertyMap.put(PREFIX, PropertyDescriptorSupport.createBasetype(PREFIX, Name.class, 5,
-                PROPERTY_CONSTRAINTS[3], false));
-        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION,
-                Description.class, 6, PROPERTY_CONSTRAINTS[4], false));
-        propertyMap.put(PROPERTYCONTAINER, PropertyDescriptorSupport.createBasetype(
-                PROPERTYCONTAINER, Flag.class, 7, PROPERTY_CONSTRAINTS[5], false));
-        propertyMap.put(SKIPABLE, PropertyDescriptorSupport.createBasetype(SKIPABLE, Flag.class, 8,
+                ScriptContainerType.class, 4, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(NAME,
+                PropertyDescriptorSupport.createBasetype(NAME, Name.class, 5, PROPERTY_CONSTRAINTS[2], false));
+        propertyMap.put(PREFIX,
+                PropertyDescriptorSupport.createBasetype(PREFIX, Name.class, 6, PROPERTY_CONSTRAINTS[3], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION, Description.class, 7,
+                PROPERTY_CONSTRAINTS[4], false));
+        propertyMap.put(PROPERTYCONTAINER, PropertyDescriptorSupport.createBasetype(PROPERTYCONTAINER, Flag.class, 8,
+                PROPERTY_CONSTRAINTS[5], false));
+        propertyMap.put(MERGEPROPERTIES, PropertyDescriptorSupport.createBasetype(MERGEPROPERTIES, Flag.class, 9,
                 PROPERTY_CONSTRAINTS[6], false));
-        propertyMap.put(HASDEPENDENCIES, PropertyDescriptorSupport.createBasetype(HASDEPENDENCIES,
-                Flag.class, 9, PROPERTY_CONSTRAINTS[7], false));
-        propertyMap.put(DEFAULTDEPENDENCY, PropertyDescriptorSupport.createBasetype(
-                DEFAULTDEPENDENCY, Flag.class, 10, PROPERTY_CONSTRAINTS[8], false));
-        propertyMap.put(MANUALEXECUTIONALLOWED, PropertyDescriptorSupport.createBasetype(
-                MANUALEXECUTIONALLOWED, Flag.class, 11, PROPERTY_CONSTRAINTS[9], false));
-        propertyMap.put(JIRAEXPORT, PropertyDescriptorSupport.createBasetype(JIRAEXPORT,
-                Flag.class, 12, PROPERTY_CONSTRAINTS[10], false));
-        propertyMap.put(CLONECONTEXT, PropertyDescriptorSupport.createBasetype(CLONECONTEXT,
-                Flag.class, 13, PROPERTY_CONSTRAINTS[11], false));
-        propertyMap.put(SCHEMAELEMENTLIST, PropertyDescriptorSupport.createCollection(
-                SCHEMAELEMENTLIST, SchemaElement.class, 14, PROPERTY_CONSTRAINTS[12], false,
-                PropertyAssociationType.COMPOSITION));
-        propertyMap.put(ATTRIBUTELIST, PropertyDescriptorSupport.createCollection(ATTRIBUTELIST,
-                Attribute.class, 15, PROPERTY_CONSTRAINTS[13], false,
-                PropertyAssociationType.COMPOSITION));
+        propertyMap.put(SKIPABLE,
+                PropertyDescriptorSupport.createBasetype(SKIPABLE, Flag.class, 10, PROPERTY_CONSTRAINTS[7], false));
+        propertyMap.put(HASDEPENDENCIES, PropertyDescriptorSupport.createBasetype(HASDEPENDENCIES, Flag.class, 11,
+                PROPERTY_CONSTRAINTS[8], false));
+        propertyMap.put(DEFAULTDEPENDENCY, PropertyDescriptorSupport.createBasetype(DEFAULTDEPENDENCY, Flag.class, 12,
+                PROPERTY_CONSTRAINTS[9], false));
+        propertyMap.put(MANUALEXECUTIONALLOWED, PropertyDescriptorSupport.createBasetype(MANUALEXECUTIONALLOWED,
+                Flag.class, 13, PROPERTY_CONSTRAINTS[10], false));
+        propertyMap.put(JIRAEXPORT,
+                PropertyDescriptorSupport.createBasetype(JIRAEXPORT, Flag.class, 14, PROPERTY_CONSTRAINTS[11], false));
+        propertyMap
+                .put(CLONECONTEXT, PropertyDescriptorSupport.createBasetype(CLONECONTEXT, Flag.class, 15,
+                        PROPERTY_CONSTRAINTS[12], false));
+        propertyMap.put(SCHEMAELEMENTLIST, PropertyDescriptorSupport.createCollection(SCHEMAELEMENTLIST,
+                SchemaElement.class, 16, PROPERTY_CONSTRAINTS[13], false, PropertyAssociationType.COMPOSITION));
+        propertyMap.put(ATTRIBUTELIST, PropertyDescriptorSupport.createCollection(ATTRIBUTELIST, Attribute.class, 17,
+                PROPERTY_CONSTRAINTS[14], false, PropertyAssociationType.COMPOSITION));
         return new NabuccoPropertyContainer(propertyMap);
     }
 
@@ -247,37 +266,32 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public List<NabuccoProperty> getProperties() {
-        List<NabuccoProperty> properties = super.getProperties();
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(LEVEL), this.level,
-                null));
+    public Set<NabuccoProperty> getProperties() {
+        Set<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(LEVEL), this.getLevel(), null));
         properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(SCRIPTSALLOWED),
-                this.scriptsAllowed, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(NAME), this.name,
-                null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(PREFIX),
-                this.prefix, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(DESCRIPTION),
-                this.description, null));
+                this.getScriptsAllowed(), null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(NAME), this.name, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(PREFIX), this.prefix, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(DESCRIPTION), this.description, null));
         properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(PROPERTYCONTAINER),
                 this.propertyContainer, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(SKIPABLE),
-                this.skipable, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(HASDEPENDENCIES),
-                this.hasDependencies, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(MERGEPROPERTIES), this.mergeProperties,
+                null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(SKIPABLE), this.skipable, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(HASDEPENDENCIES), this.hasDependencies,
+                null));
         properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(DEFAULTDEPENDENCY),
                 this.defaultDependency, null));
-        properties.add(super.createProperty(
-                SchemaElement.getPropertyDescriptor(MANUALEXECUTIONALLOWED),
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(MANUALEXECUTIONALLOWED),
                 this.manualExecutionAllowed, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(JIRAEXPORT),
-                this.jiraExport, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(CLONECONTEXT),
-                this.cloneContext, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(JIRAEXPORT), this.jiraExport, null));
+        properties
+                .add(super.createProperty(SchemaElement.getPropertyDescriptor(CLONECONTEXT), this.cloneContext, null));
         properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(SCHEMAELEMENTLIST),
                 this.schemaElementList, null));
-        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(ATTRIBUTELIST),
-                this.attributeList, null));
+        properties.add(super.createProperty(SchemaElement.getPropertyDescriptor(ATTRIBUTELIST), this.attributeList,
+                null));
         return properties;
     }
 
@@ -304,6 +318,9 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
             return true;
         } else if ((property.getName().equals(PROPERTYCONTAINER) && (property.getType() == Flag.class))) {
             this.setPropertyContainer(((Flag) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(MERGEPROPERTIES) && (property.getType() == Flag.class))) {
+            this.setMergeProperties(((Flag) property.getInstance()));
             return true;
         } else if ((property.getName().equals(SKIPABLE) && (property.getType() == Flag.class))) {
             this.setSkipable(((Flag) property.getInstance()));
@@ -378,6 +395,11 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
                 return false;
         } else if ((!this.propertyContainer.equals(other.propertyContainer)))
             return false;
+        if ((this.mergeProperties == null)) {
+            if ((other.mergeProperties != null))
+                return false;
+        } else if ((!this.mergeProperties.equals(other.mergeProperties)))
+            return false;
         if ((this.skipable == null)) {
             if ((other.skipable != null))
                 return false;
@@ -416,23 +438,19 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
         final int PRIME = 31;
         int result = super.hashCode();
         result = ((PRIME * result) + ((this.level == null) ? 0 : this.level.hashCode()));
-        result = ((PRIME * result) + ((this.scriptsAllowed == null) ? 0 : this.scriptsAllowed
-                .hashCode()));
+        result = ((PRIME * result) + ((this.scriptsAllowed == null) ? 0 : this.scriptsAllowed.hashCode()));
         result = ((PRIME * result) + ((this.name == null) ? 0 : this.name.hashCode()));
         result = ((PRIME * result) + ((this.prefix == null) ? 0 : this.prefix.hashCode()));
         result = ((PRIME * result) + ((this.description == null) ? 0 : this.description.hashCode()));
-        result = ((PRIME * result) + ((this.propertyContainer == null) ? 0 : this.propertyContainer
-                .hashCode()));
+        result = ((PRIME * result) + ((this.propertyContainer == null) ? 0 : this.propertyContainer.hashCode()));
+        result = ((PRIME * result) + ((this.mergeProperties == null) ? 0 : this.mergeProperties.hashCode()));
         result = ((PRIME * result) + ((this.skipable == null) ? 0 : this.skipable.hashCode()));
-        result = ((PRIME * result) + ((this.hasDependencies == null) ? 0 : this.hasDependencies
+        result = ((PRIME * result) + ((this.hasDependencies == null) ? 0 : this.hasDependencies.hashCode()));
+        result = ((PRIME * result) + ((this.defaultDependency == null) ? 0 : this.defaultDependency.hashCode()));
+        result = ((PRIME * result) + ((this.manualExecutionAllowed == null) ? 0 : this.manualExecutionAllowed
                 .hashCode()));
-        result = ((PRIME * result) + ((this.defaultDependency == null) ? 0 : this.defaultDependency
-                .hashCode()));
-        result = ((PRIME * result) + ((this.manualExecutionAllowed == null) ? 0
-                : this.manualExecutionAllowed.hashCode()));
         result = ((PRIME * result) + ((this.jiraExport == null) ? 0 : this.jiraExport.hashCode()));
-        result = ((PRIME * result) + ((this.cloneContext == null) ? 0 : this.cloneContext
-                .hashCode()));
+        result = ((PRIME * result) + ((this.cloneContext == null) ? 0 : this.cloneContext.hashCode()));
         return result;
     }
 
@@ -635,6 +653,39 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
             this.propertyContainer = new Flag();
         }
         this.propertyContainer.setValue(propertyContainer);
+    }
+
+    /**
+     * Missing description at method getMergeProperties.
+     *
+     * @return the Flag.
+     */
+    public Flag getMergeProperties() {
+        return this.mergeProperties;
+    }
+
+    /**
+     * Missing description at method setMergeProperties.
+     *
+     * @param mergeProperties the Flag.
+     */
+    public void setMergeProperties(Flag mergeProperties) {
+        this.mergeProperties = mergeProperties;
+    }
+
+    /**
+     * Missing description at method setMergeProperties.
+     *
+     * @param mergeProperties the Boolean.
+     */
+    public void setMergeProperties(Boolean mergeProperties) {
+        if ((this.mergeProperties == null)) {
+            if ((mergeProperties == null)) {
+                return;
+            }
+            this.mergeProperties = new Flag();
+        }
+        this.mergeProperties.setValue(mergeProperties);
     }
 
     /**
@@ -842,8 +893,7 @@ public class SchemaElement extends NabuccoDatatype implements Datatype {
      */
     public NabuccoList<SchemaElement> getSchemaElementList() {
         if ((this.schemaElementList == null)) {
-            this.schemaElementList = new NabuccoListImpl<SchemaElement>(
-                    NabuccoCollectionState.INITIALIZED);
+            this.schemaElementList = new NabuccoListImpl<SchemaElement>(NabuccoCollectionState.INITIALIZED);
         }
         return this.schemaElementList;
     }

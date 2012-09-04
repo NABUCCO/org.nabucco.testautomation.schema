@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding=".dummy" kind="src" path="src/main/gen"/>
+	<classpathentry excluding=".dummy" kind="src" path="src/main/man"/>
+	<classpathentry excluding=".dummy" kind="src" path="src/test/gen"/>
+	<classpathentry excluding=".dummy" kind="src" path="src/test/man"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.facade.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.facade.datatype"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.facade.exception"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.facade.message"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.facade.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.impl.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.impl.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.schema.ui.web"/>
+	<classpathentry kind="var" path="ECLIPSE_TARGET/platform.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.framework.base.facade.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.framework.base.ui.rcp.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.framework.common.dynamiccode.facade.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.framework.common.dynamiccode.ui.rcp.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.framework.plugin.base.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.testautomation.property.facade.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation.schema/lib/rcp/org.nabucco.testautomation.property.ui.rcp.jar"/>
+	<classpathentry kind="output" path="out/ide"/>
+</classpath>

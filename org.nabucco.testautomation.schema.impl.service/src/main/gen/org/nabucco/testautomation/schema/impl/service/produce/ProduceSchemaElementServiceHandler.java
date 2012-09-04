@@ -1,5 +1,16 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.impl.service.produce;
 
@@ -8,8 +19,9 @@ import org.nabucco.framework.base.facade.exception.service.ProduceException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
-import org.nabucco.framework.base.impl.service.handler.ServiceHandler;
-import org.nabucco.framework.base.impl.service.handler.ServiceHandlerSupport;
+import org.nabucco.framework.base.impl.service.ServiceHandler;
+import org.nabucco.framework.base.impl.service.maintain.PersistenceServiceHandler;
+import org.nabucco.framework.base.impl.service.maintain.PersistenceServiceHandlerSupport;
 import org.nabucco.testautomation.schema.facade.message.SchemaElementMsg;
 
 /**
@@ -18,8 +30,8 @@ import org.nabucco.testautomation.schema.facade.message.SchemaElementMsg;
  * @version 1.0
  * @author Steffen Schmidt, PRODYNA AG, 2010-04-13
  */
-public abstract class ProduceSchemaElementServiceHandler extends ServiceHandlerSupport implements
-        ServiceHandler {
+public abstract class ProduceSchemaElementServiceHandler extends PersistenceServiceHandlerSupport implements
+        ServiceHandler, PersistenceServiceHandler {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,8 +49,7 @@ public abstract class ProduceSchemaElementServiceHandler extends ServiceHandlerS
      * @return the ServiceResponse<SchemaElementMsg>.
      * @throws ProduceException
      */
-    protected ServiceResponse<SchemaElementMsg> invoke(ServiceRequest<EmptyServiceMessage> rq)
-            throws ProduceException {
+    protected ServiceResponse<SchemaElementMsg> invoke(ServiceRequest<EmptyServiceMessage> rq) throws ProduceException {
         ServiceResponse<SchemaElementMsg> rs;
         SchemaElementMsg msg;
         try {
@@ -73,8 +84,7 @@ public abstract class ProduceSchemaElementServiceHandler extends ServiceHandlerS
      * @return the SchemaElementMsg.
      * @throws ProduceException
      */
-    protected abstract SchemaElementMsg produceSchemaElement(EmptyServiceMessage msg)
-            throws ProduceException;
+    protected abstract SchemaElementMsg produceSchemaElement(EmptyServiceMessage msg) throws ProduceException;
 
     /**
      * Getter for the Id.

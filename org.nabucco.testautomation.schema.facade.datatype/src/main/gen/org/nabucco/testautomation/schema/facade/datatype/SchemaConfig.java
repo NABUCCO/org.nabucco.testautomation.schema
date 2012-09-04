@@ -1,11 +1,23 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.facade.datatype;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Name;
@@ -18,7 +30,7 @@ import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescri
 import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
 import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
 import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
-import org.nabucco.testautomation.facade.datatype.base.ExportDatatype;
+import org.nabucco.testautomation.property.facade.datatype.base.TestAutomationDatatype;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
 
 /**
@@ -26,11 +38,11 @@ import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
  *
  * @author Steffen Schmidt, PRODYNA AG, 2010-04-09
  */
-public class SchemaConfig extends ExportDatatype implements Datatype {
+public class SchemaConfig extends TestAutomationDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "l0,255;m0,1;", "m0,n;" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;u0,n;m1,1;", "l0,255;u0,n;m0,1;", "m0,n;" };
 
     public static final String NAME = "name";
 
@@ -103,15 +115,13 @@ public class SchemaConfig extends ExportDatatype implements Datatype {
      */
     protected static NabuccoPropertyContainer createPropertyContainer() {
         Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
-        propertyMap.putAll(PropertyCache.getInstance().retrieve(ExportDatatype.class)
-                .getPropertyMap());
-        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 4,
-                PROPERTY_CONSTRAINTS[0], false));
-        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION,
-                Description.class, 5, PROPERTY_CONSTRAINTS[1], false));
-        propertyMap.put(SCHEMAELEMENTLIST, PropertyDescriptorSupport.createCollection(
-                SCHEMAELEMENTLIST, SchemaElement.class, 6, PROPERTY_CONSTRAINTS[2], false,
-                PropertyAssociationType.COMPOSITION));
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(TestAutomationDatatype.class).getPropertyMap());
+        propertyMap.put(NAME,
+                PropertyDescriptorSupport.createBasetype(NAME, Name.class, 4, PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION, Description.class, 5,
+                PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(SCHEMAELEMENTLIST, PropertyDescriptorSupport.createCollection(SCHEMAELEMENTLIST,
+                SchemaElement.class, 6, PROPERTY_CONSTRAINTS[2], false, PropertyAssociationType.COMPOSITION));
         return new NabuccoPropertyContainer(propertyMap);
     }
 
@@ -121,12 +131,10 @@ public class SchemaConfig extends ExportDatatype implements Datatype {
     }
 
     @Override
-    public List<NabuccoProperty> getProperties() {
-        List<NabuccoProperty> properties = super.getProperties();
-        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(NAME), this.name,
-                null));
-        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(DESCRIPTION),
-                this.description, null));
+    public Set<NabuccoProperty> getProperties() {
+        Set<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(NAME), this.name, null));
+        properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(DESCRIPTION), this.description, null));
         properties.add(super.createProperty(SchemaConfig.getPropertyDescriptor(SCHEMAELEMENTLIST),
                 this.schemaElementList, null));
         return properties;
@@ -268,8 +276,7 @@ public class SchemaConfig extends ExportDatatype implements Datatype {
      */
     public NabuccoList<SchemaElement> getSchemaElementList() {
         if ((this.schemaElementList == null)) {
-            this.schemaElementList = new NabuccoListImpl<SchemaElement>(
-                    NabuccoCollectionState.INITIALIZED);
+            this.schemaElementList = new NabuccoListImpl<SchemaElement>(NabuccoCollectionState.INITIALIZED);
         }
         return this.schemaElementList;
     }

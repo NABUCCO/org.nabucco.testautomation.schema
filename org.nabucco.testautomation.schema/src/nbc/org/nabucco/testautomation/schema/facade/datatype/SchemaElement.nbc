@@ -20,8 +20,8 @@ import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Flag;
+import org.nabucco.testautomation.property.facade.datatype.base.HierarchyLevelType;
 import org.nabucco.testautomation.schema.facade.datatype.attribute.Attribute;
-import org.nabucco.testautomation.facade.datatype.base.HierarchyLevelType;
 import org.nabucco.testautomation.schema.facade.datatype.ScriptContainerType;
 import org.nabucco.testautomation.schema.facade.datatype.SchemaElement;
 
@@ -44,6 +44,8 @@ public Datatype SchemaElement extends NabuccoDatatype {
 	
 	private Basetype Flag[1] propertyContainer;
 
+	private Basetype Flag[1] mergeProperties;
+
 	private Basetype Flag[1] skipable;
 	
 	private Basetype Flag[1] hasDependencies;
@@ -58,6 +60,7 @@ public Datatype SchemaElement extends NabuccoDatatype {
 	
 	private Datatype SchemaElement[0..*] schemaElementList;
 	
+	@FetchStrategy EAGER
 	private Datatype Attribute[0..*] attributeList;
 	
 }

@@ -42,9 +42,4 @@ public ListView SchemaConfigListView {
 	@ColumnLabelDefault 	"Schema Config Description"
 	private Column schemaConfigDescription;
 	
-	@MappedField 			schemaConfig.owner
-	@ColumnLabelId			schemaConfig.owner 
-	@ColumnLabelDefault 	"Owner"
-	private Column owner;
-	
 }

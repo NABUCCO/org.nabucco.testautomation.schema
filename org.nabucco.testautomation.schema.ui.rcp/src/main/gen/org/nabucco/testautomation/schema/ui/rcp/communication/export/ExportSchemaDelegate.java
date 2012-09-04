@@ -1,16 +1,29 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ *
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.nabucco.testautomation.schema.ui.rcp.communication.export;
 
+import org.nabucco.framework.base.facade.datatype.NabuccoSystem;
+import org.nabucco.framework.base.facade.datatype.context.ServiceSubContext;
 import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
 import org.nabucco.framework.base.facade.message.exporting.ExportRs;
-import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.communication.ServiceDelegateSupport;
-import org.nabucco.framework.plugin.base.logging.NabuccoLogMessage;
 import org.nabucco.testautomation.schema.facade.service.export.ExportSchema;
 
 /**
@@ -36,28 +49,32 @@ public class ExportSchemaDelegate extends ServiceDelegateSupport {
     /**
      * Export.
      *
-     * @param rq the EmptyServiceMessage.
+     * @param subContexts the ServiceSubContext....
+     * @param message the EmptyServiceMessage.
      * @return the ExportRs.
      * @throws ClientException
      */
-    public ExportRs export(EmptyServiceMessage rq) throws ClientException {
+    public ExportRs export(EmptyServiceMessage message, ServiceSubContext... subContexts) throws ClientException {
         ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<ExportRs> rs;
+                super.createServiceContext(subContexts));
+        request.setRequestMessage(message);
+        ServiceResponse<ExportRs> response = null;
+        Exception exception = null;
         if ((service != null)) {
-            long start = System.currentTimeMillis();
+            super.handleRequest(request);
+            long start = NabuccoSystem.getCurrentTimeMillis();
             try {
-                rs = service.export(request);
-                return rs.getResponseMessage();
-            } catch (Exception exception) {
-                super.processException(exception);
+                response = service.export(request);
+            } catch (Exception e) {
+                exception = e;
             } finally {
-                long end = System.currentTimeMillis();
-                Activator.getDefault().logDebug(
-                        new NabuccoLogMessage(ExportSchemaDelegate.class, "Service: ",
-                                "ExportSchema.export", " Time: ", String.valueOf((end - start)),
-                                "ms."));
+                long end = NabuccoSystem.getCurrentTimeMillis();
+                long duration = (end - start);
+                super.monitorResult(ExportSchema.class, "export", duration, exception);
+            }
+            if ((response != null)) {
+                super.handleResponse(response);
+                return response.getResponseMessage();
             }
         }
         throw new ClientException("Cannot execute service operation: ExportSchema.export");

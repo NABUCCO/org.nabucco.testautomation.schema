@@ -1,10 +1,21 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.ui.rcp.search.config.model;
 
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
-import org.nabucco.framework.base.facade.datatype.Description;
+import org.nabucco.framework.base.facade.datatype.Key;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchParameter;
 import org.nabucco.framework.plugin.base.component.search.model.NabuccoComponentSearchViewModel;
@@ -16,8 +27,8 @@ import org.nabucco.testautomation.schema.facade.datatype.SchemaConfig;
  * @version 1.0
  * @author Steffen Schmidt, PRODYNA AG, 2010-04-13
  */
-public class SchemaConfigSearchViewModel extends NabuccoComponentSearchViewModel<SchemaConfig>
-        implements NabuccoComponentSearchParameter {
+public class SchemaConfigSearchViewModel extends NabuccoComponentSearchViewModel<SchemaConfig> implements
+        NabuccoComponentSearchParameter {
 
     public static final String ID = "org.nabucco.testautomation.schema.ui.search.config.SchemaConfigSearchViewModel";
 
@@ -25,7 +36,7 @@ public class SchemaConfigSearchViewModel extends NabuccoComponentSearchViewModel
 
     public static final String PROPERTY_SCHEMACONFIG_NAME = "schemaConfigName";
 
-    public static final String PROPERTY_SCHEMACONFIG_DESCRIPTION = "schemaConfigDescription";
+    public static final String PROPERTY_SCHEMACONFIG_IDENTIFICATIONKEY = "schemaConfigIdentificationKey";
 
     public static String TITLE = (ID + "Title");
 
@@ -72,8 +83,7 @@ public class SchemaConfigSearchViewModel extends NabuccoComponentSearchViewModel
         String oldVal = schemaConfig.getName().getValue();
         schemaConfig.getName().setValue(newName);
         this.updateProperty(PROPERTY_SCHEMACONFIG_NAME, oldVal, newName);
-        if (((!oldVal.equals(newName)) && schemaConfig.getDatatypeState().equals(
-                DatatypeState.PERSISTENT))) {
+        if (((!oldVal.equals(newName)) && schemaConfig.getDatatypeState().equals(DatatypeState.PERSISTENT))) {
             schemaConfig.setDatatypeState(DatatypeState.MODIFIED);
         }
     }
@@ -84,43 +94,41 @@ public class SchemaConfigSearchViewModel extends NabuccoComponentSearchViewModel
      * @return the String.
      */
     public String getSchemaConfigName() {
-        if ((((schemaConfig == null) || (schemaConfig.getName() == null)) || (schemaConfig
-                .getName().getValue() == null))) {
+        if ((((schemaConfig == null) || (schemaConfig.getName() == null)) || (schemaConfig.getName().getValue() == null))) {
             return "";
         }
         return schemaConfig.getName().getValue();
     }
 
     /**
-     * Setter for the SchemaConfigDescription.
+     * Setter for the SchemaConfigIdentificationKey.
      *
-     * @param newDescription the String.
+     * @param newIdentificationKey the String.
      */
-    public void setSchemaConfigDescription(String newDescription) {
-        if (((schemaConfig != null) && (schemaConfig.getDescription() == null))) {
-            Description description = new Description();
-            schemaConfig.setDescription(description);
+    public void setSchemaConfigIdentificationKey(String newIdentificationKey) {
+        if (((schemaConfig != null) && (schemaConfig.getIdentificationKey() == null))) {
+            Key identificationKey = new Key();
+            schemaConfig.setIdentificationKey(identificationKey);
         }
-        String oldVal = schemaConfig.getDescription().getValue();
-        schemaConfig.getDescription().setValue(newDescription);
-        this.updateProperty(PROPERTY_SCHEMACONFIG_DESCRIPTION, oldVal, newDescription);
-        if (((!oldVal.equals(newDescription)) && schemaConfig.getDatatypeState().equals(
-                DatatypeState.PERSISTENT))) {
+        String oldVal = schemaConfig.getIdentificationKey().getValue();
+        schemaConfig.getIdentificationKey().setValue(newIdentificationKey);
+        this.updateProperty(PROPERTY_SCHEMACONFIG_IDENTIFICATIONKEY, oldVal, newIdentificationKey);
+        if (((!oldVal.equals(newIdentificationKey)) && schemaConfig.getDatatypeState().equals(DatatypeState.PERSISTENT))) {
             schemaConfig.setDatatypeState(DatatypeState.MODIFIED);
         }
     }
 
     /**
-     * Getter for the SchemaConfigDescription.
+     * Getter for the SchemaConfigIdentificationKey.
      *
      * @return the String.
      */
-    public String getSchemaConfigDescription() {
-        if ((((schemaConfig == null) || (schemaConfig.getDescription() == null)) || (schemaConfig
-                .getDescription().getValue() == null))) {
+    public String getSchemaConfigIdentificationKey() {
+        if ((((schemaConfig == null) || (schemaConfig.getIdentificationKey() == null)) || (schemaConfig
+                .getIdentificationKey().getValue() == null))) {
             return "";
         }
-        return schemaConfig.getDescription().getValue();
+        return schemaConfig.getIdentificationKey().getValue();
     }
 
     @Override

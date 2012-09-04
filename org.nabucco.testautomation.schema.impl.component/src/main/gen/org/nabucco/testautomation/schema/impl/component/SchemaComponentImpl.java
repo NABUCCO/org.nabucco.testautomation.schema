@@ -1,20 +1,31 @@
 /*
- * NABUCCO Generator, Copyright (c) 2010, PRODYNA AG, Germany. All rights reserved.
+ * Copyright 2012 PRODYNA AG
+ * 
+ * Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.opensource.org/licenses/eclipse-1.0.php or
+ * http://www.nabucco.org/License.html
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language governing permissions
+ * and limitations under the License.
  */
 package org.nabucco.testautomation.schema.impl.component;
 
+import org.nabucco.framework.base.facade.component.handler.PostConstructHandler;
+import org.nabucco.framework.base.facade.component.handler.PreDestroyHandler;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
 import org.nabucco.framework.base.facade.service.componentrelation.ComponentRelationService;
+import org.nabucco.framework.base.facade.service.injection.InjectionProvider;
+import org.nabucco.framework.base.facade.service.queryfilter.QueryFilterService;
 import org.nabucco.framework.base.impl.component.ComponentSupport;
-import org.nabucco.testautomation.schema.facade.component.SchemaComponent;
-import org.nabucco.testautomation.schema.facade.service.export.ExportSchema;
-import org.nabucco.testautomation.schema.facade.service.importing.ImportSchema;
-import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceAttribute;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchemaElement;
-import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaConfig;
-import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaElement;
+import org.nabucco.testautomation.schema.facade.component.SchemaComponentLocal;
+import org.nabucco.testautomation.schema.facade.component.SchemaComponentRemote;
+import org.nabucco.testautomation.schema.facade.service.maintain.MaintainSchema;
+import org.nabucco.testautomation.schema.facade.service.produce.ProduceSchema;
+import org.nabucco.testautomation.schema.facade.service.search.SearchSchema;
 
 /**
  * SchemaComponentImpl<p/>Component for TestAutomation schemas<p/>
@@ -22,27 +33,11 @@ import org.nabucco.testautomation.schema.facade.service.search.SearchSchemaEleme
  * @version 1.0
  * @author Steffen Schmidt, PRODYNA AG, 2010-04-09
  */
-public class SchemaComponentImpl extends ComponentSupport implements SchemaComponent {
+public class SchemaComponentImpl extends ComponentSupport implements SchemaComponentLocal, SchemaComponentRemote {
 
     private static final long serialVersionUID = 1L;
 
-    private ComponentRelationService componentRelationService;
-
-    private MaintainSchemaConfig maintainSchemaConfig;
-
-    private ProduceSchemaConfig produceSchemaConfig;
-
-    private ProduceSchemaElement produceSchemaElement;
-
-    private ProduceAttribute produceAttribute;
-
-    private SearchSchemaConfig searchSchemaConfig;
-
-    private SearchSchemaElement searchSchemaElement;
-
-    private ExportSchema exportSchema;
-
-    private ImportSchema importSchema;
+    private static final String ID = "SchemaComponent";
 
     /** Constructs a new SchemaComponentImpl instance. */
     public SchemaComponentImpl() {
@@ -50,79 +45,99 @@ public class SchemaComponentImpl extends ComponentSupport implements SchemaCompo
     }
 
     @Override
+    public void postConstruct() {
+        super.postConstruct();
+        InjectionProvider injector = InjectionProvider.getInstance(ID);
+        PostConstructHandler handler = injector.inject(PostConstructHandler.getId());
+        if ((handler == null)) {
+            if (super.getLogger().isDebugEnabled()) {
+                super.getLogger().debug("No post construct handler configured for \'", ID, "\'.");
+            }
+            return;
+        }
+        handler.setLocatable(this);
+        handler.setLogger(super.getLogger());
+        handler.invoke();
+    }
+
+    @Override
+    public void preDestroy() {
+        super.preDestroy();
+        InjectionProvider injector = InjectionProvider.getInstance(ID);
+        PreDestroyHandler handler = injector.inject(PreDestroyHandler.getId());
+        if ((handler == null)) {
+            if (super.getLogger().isDebugEnabled()) {
+                super.getLogger().debug("No pre destroy handler configured for \'", ID, "\'.");
+            }
+            return;
+        }
+        handler.setLocatable(this);
+        handler.setLogger(super.getLogger());
+        handler.invoke();
+    }
+
+    @Override
+    public String getId() {
+        return ID;
+    }
+
+    @Override
+    public String getName() {
+        return COMPONENT_NAME;
+    }
+
+    @Override
+    public String getJndiName() {
+        return JNDI_NAME;
+    }
+
+    @Override
     public ComponentRelationService getComponentRelationService() throws ServiceException {
-        return this.componentRelationService;
+        return super.lookup(SchemaComponentJndiNames.COMPONENT_RELATION_SERVICE_REMOTE, ComponentRelationService.class);
     }
 
-    /**
-     * Getter for the MaintainSchemaConfig.
-     *
-     * @return the MaintainSchemaConfig.
-     */
-    public MaintainSchemaConfig getMaintainSchemaConfig() {
-        return this.maintainSchemaConfig;
+    @Override
+    public ComponentRelationService getComponentRelationServiceLocal() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.COMPONENT_RELATION_SERVICE_LOCAL, ComponentRelationService.class);
     }
 
-    /**
-     * Getter for the ProduceSchemaConfig.
-     *
-     * @return the ProduceSchemaConfig.
-     */
-    public ProduceSchemaConfig getProduceSchemaConfig() {
-        return this.produceSchemaConfig;
+    @Override
+    public QueryFilterService getQueryFilterService() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.QUERY_FILTER_SERVICE_REMOTE, QueryFilterService.class);
     }
 
-    /**
-     * Getter for the ProduceSchemaElement.
-     *
-     * @return the ProduceSchemaElement.
-     */
-    public ProduceSchemaElement getProduceSchemaElement() {
-        return this.produceSchemaElement;
+    @Override
+    public QueryFilterService getQueryFilterServiceLocal() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.QUERY_FILTER_SERVICE_LOCAL, QueryFilterService.class);
     }
 
-    /**
-     * Getter for the ProduceAttribute.
-     *
-     * @return the ProduceAttribute.
-     */
-    public ProduceAttribute getProduceAttribute() {
-        return this.produceAttribute;
+    @Override
+    public MaintainSchema getMaintainSchemaLocal() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.MAINTAIN_SCHEMA_LOCAL, MaintainSchema.class);
     }
 
-    /**
-     * Getter for the SearchSchemaConfig.
-     *
-     * @return the SearchSchemaConfig.
-     */
-    public SearchSchemaConfig getSearchSchemaConfig() {
-        return this.searchSchemaConfig;
+    @Override
+    public MaintainSchema getMaintainSchema() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.MAINTAIN_SCHEMA_REMOTE, MaintainSchema.class);
     }
 
-    /**
-     * Getter for the SearchSchemaElement.
-     *
-     * @return the SearchSchemaElement.
-     */
-    public SearchSchemaElement getSearchSchemaElement() {
-        return this.searchSchemaElement;
+    @Override
+    public ProduceSchema getProduceSchemaLocal() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.PRODUCE_SCHEMA_LOCAL, ProduceSchema.class);
     }
 
-    /**
-     * Getter for the ExportSchema.
-     *
-     * @return the ExportSchema.
-     */
-    public ExportSchema getExportSchema() {
-        return this.exportSchema;
+    @Override
+    public ProduceSchema getProduceSchema() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.PRODUCE_SCHEMA_REMOTE, ProduceSchema.class);
     }
 
-    /**
-     * Getter for the ImportSchema.
-     *
-     * @return the ImportSchema.
-     */
-    public ImportSchema getImportSchema() {
-        return this.importSchema;
+    @Override
+    public SearchSchema getSearchSchemaLocal() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.SEARCH_SCHEMA_LOCAL, SearchSchema.class);
+    }
+
+    @Override
+    public SearchSchema getSearchSchema() throws ServiceException {
+        return super.lookup(SchemaComponentJndiNames.SEARCH_SCHEMA_REMOTE, SearchSchema.class);
     }
 }

@@ -16,10 +16,11 @@
 */
 package org.nabucco.testautomation.schema.facade.datatype.attribute;
 
+import org.nabucco.framework.base.facade.datatype.Description;
+import org.nabucco.framework.base.facade.datatype.Flag;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.Flag;
-import org.nabucco.framework.base.facade.datatype.Description;
+import org.nabucco.framework.base.facade.datatype.code.CodePath;
 import org.nabucco.testautomation.schema.facade.datatype.attribute.AttributeType;
 
 @Author			Steffen Schmidt
@@ -35,5 +36,7 @@ public Datatype Attribute extends NabuccoDatatype {
 	private Basetype Flag[1] mandatory;
 	
 	private Enumeration AttributeType[1] type;
+
+	private Basetype CodePath[0..1] codePath;  
 	
 }

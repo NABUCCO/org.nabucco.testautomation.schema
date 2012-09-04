@@ -33,9 +33,9 @@ public SearchView SchemaConfigSearchView {
 	@FieldLabelDefault 	"Name"
 	private LabeledInputField schemaConfigName;
 	
-	@MappedField 		schemaConfig.description
-	@FieldLabelId		SchemaConfig.description
-	@FieldLabelDefault 	"Description"
-	private LabeledInputField schemaConfigDescription;
+	@MappedField 		schemaConfig.identificationKey
+	@FieldLabelId		SchemaConfig.identificationKey
+	@FieldLabelDefault 	"Schema Config Key"
+	private LabeledInputField schemaConfigKey;
 	
 }
